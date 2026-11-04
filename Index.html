@@ -110,21 +110,22 @@
 
         .service-type {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             margin-bottom: 20px;
         }
 
         .service-btn {
             flex: 1;
-            padding: 12px;
+            padding: 10px 6px;
             border: 2px solid #eef2f7;
             border-radius: 12px;
             background: none;
             font-weight: 700;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             cursor: pointer;
             transition: all 0.2s ease;
             color: var(--primary-color);
+            text-align: center;
         }
 
         .service-btn.active {
@@ -218,6 +219,14 @@
             font-size: 0.75rem;
             opacity: 0.8;
             margin-left: 4px;
+        }
+
+        /* Secciones dinámicas de inputs según servicio */
+        .service-fields {
+            display: none;
+        }
+        .service-fields.active {
+            display: block;
         }
 
         /* Lista de Ofertas */
@@ -404,39 +413,57 @@
 
     <div class="header">
         <div class="brand-logo">HySky <span>Recarga</span></div>
-        <p>Envía saldo y paquetes de datos al mejor precio</p>
+        <p>Envía saldo, paquetes y tarjetas a Cuba al mejor precio</p>
     </div>
 
     <div class="card">
-        <!-- Selector de Servicio -->
+        <!-- Selector de Servicio (Incluye Tarjetas Clásicas) -->
         <div class="service-type">
-            <button class="service-btn active" onclick="selectService('movil', this)">Cubacel Móvil</button>
-            <button class="service-btn" onclick="selectService('nauta', this)">Nauta Internet</button>
+            <button class="service-btn active" onclick="switchServiceTab('movil', this)">Cubacel Móvil</button>
+            <button class="service-btn" onclick="switchServiceTab('nauta', this)">Nauta Internet</button>
+            <button class="service-btn" onclick="switchServiceTab('tarjetas', this)">Tarjetas Clásicas</button>
         </div>
 
-        <!-- Input de Teléfono -->
-        <div class="input-group">
-            <label for="phone" id="input-label">Móvil que vas a recargar</label>
-            <div class="phone-input">
-                <span class="prefix" id="input-prefix">+53</span>
-                <input type="tel" id="phone" placeholder="5XXXXXXX" maxlength="8">
+        <!-- SECCIÓN DE INPUTS PARA MÓVIL / NAUTA -->
+        <div id="fields-telecom" class="service-fields active">
+            <div class="input-group">
+                <label for="phone" id="input-label">Móvil que vas a recargar</label>
+                <div class="phone-input">
+                    <span class="prefix" id="input-prefix">+53</span>
+                    <input type="tel" id="phone" placeholder="5XXXXXXX" maxlength="8">
+                </div>
             </div>
         </div>
 
-        <label style="font-weight: 700; color: var(--primary-color); display:block; margin-bottom:12px;">Selecciona una recarga</label>
+        <!-- SECCIÓN DE INPUTS PARA TARJETAS CLÁSICAS (Nombre y Teléfono del receptor en Cuba) -->
+        <div id="fields-tarjetas" class="service-fields">
+            <div class="input-group">
+                <label for="recipient-name">Nombre completo de quien recibe en Cuba</label>
+                <input type="text" id="recipient-name" class="input-control" placeholder="Nombre y Apellidos">
+            </div>
+            <div class="input-group">
+                <label for="recipient-phone">Teléfono de quien recibe en Cuba</label>
+                <div class="phone-input">
+                    <span class="prefix">+53</span>
+                    <input type="tel" id="recipient-phone" placeholder="5XXXXXXX" maxlength="8">
+                </div>
+            </div>
+        </div>
+
+        <label id="section-title-label" style="font-weight: 700; color: var(--primary-color); display:block; margin-bottom:12px;">Selecciona una recarga</label>
         
-        <!-- Pestañas de Filtro (Total: 10, Regular: 7, Paquetes: 3) -->
-        <div class="filter-tabs">
+        <!-- Pestañas de Filtro (Solo para Telecom) -->
+        <div id="telecom-filters" class="filter-tabs">
             <button class="filter-btn" onclick="filterPlans('all', this)">Todos <span>10</span></button>
             <button class="filter-btn active" onclick="filterPlans('regular', this)">Regular <span>7</span></button>
             <button class="filter-btn" onclick="filterPlans('paquetes', this)">Paquetes <span>3</span></button>
         </div>
 
-        <!-- LISTA COMPLETA DE OPCIONES DE RECARGAS -->
+        <!-- LISTA DE OPCIONES (TELECOM Y TARJETAS) -->
         <div class="plans-list" id="plans-container">
             
             <!-- OPCIÓN DE PRUEBA -->
-            <div class="plan-item regular" onclick="selectPlan(this, 'plan_25_cup_prueba', 'Envía 25 CUP (Prueba)', 1.00)">
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_25_cup_prueba', 'Envía 25 CUP (Prueba)', 1.00)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 25 CUP</div>
                     <div class="plan-details">Prueba de servicio. Reciben 25 CUP de saldo principal</div>
@@ -449,7 +476,7 @@
             </div>
 
             <!-- Option 1 -->
-            <div class="plan-item regular" onclick="selectPlan(this, 'plan_600_cup', 'Envía 600 CUP', 26.99)">
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_600_cup', 'Envía 600 CUP', 26.99)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 600 CUP</div>
                     <div class="plan-details">Reciben 600 CUP + Internet ILIMITADO 24 horas x 10 días</div>
@@ -461,7 +488,7 @@
             </div>
 
             <!-- Option 2 (Recomendada) -->
-            <div class="plan-item regular" onclick="selectPlan(this, 'plan_1000_cup_promo', 'Envía 1000 CUP', 21.99)">
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_1000_cup_promo', 'Envía 1000 CUP', 21.99)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 1000 CUP</div>
                     <div class="plan-details">Reciben 1000 CUP (500 CUP x2) de saldo principal (válido 330 días)</div>
@@ -474,7 +501,7 @@
             </div>
 
             <!-- Option 3 -->
-            <div class="plan-item regular" onclick="selectPlan(this, 'plan_1250_cup', 'Envía 1250 CUP', 53.99)">
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_1250_cup', 'Envía 1250 CUP', 53.99)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 1250 CUP</div>
                     <div class="plan-details">Reciben 1250 CUP + Internet ILIMITADO 24 horas x 10 días</div>
@@ -486,7 +513,7 @@
             </div>
 
             <!-- Option 4 -->
-            <div class="plan-item regular" onclick="selectPlan(this, 'plan_500_cup', 'Envía 500 CUP', 21.99)">
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_500_cup', 'Envía 500 CUP', 21.99)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 500 CUP</div>
                     <div class="plan-details">Reciben 500 CUP + Internet ILIMITADO 24 horas x 10 días</div>
@@ -498,7 +525,7 @@
             </div>
 
             <!-- Option 5 -->
-            <div class="plan-item regular" onclick="selectPlan(this, 'plan_1000_cup_std', 'Envía 1000 CUP', 43.99)">
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_1000_cup_std', 'Envía 1000 CUP', 43.99)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 1000 CUP</div>
                     <div class="plan-details">Reciben 1000 CUP + Internet ILIMITADO 24 horas x 10 días</div>
@@ -510,7 +537,7 @@
             </div>
 
             <!-- MEGA OFERTA AL FINAL DE LAS REGULARES -->
-            <div class="plan-item regular" onclick="selectPlan(this, 'plan_1250_quintuplicada', 'Envía 1250 CUP (Quintuplicada)', 99.00)">
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_1250_quintuplicada', 'Envía 1250 CUP (Quintuplicada)', 99.00)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 1250 CUP Quintuplicada</div>
                     <div class="plan-details">Reciben 6250 CUP de saldo principal + Internet ilimitada por 30 días</div>
@@ -521,8 +548,8 @@
                 <span class="mega-badge">Mega Oferta</span>
             </div>
 
-            <!-- PAQUETES (Exactamente 3 opciones) -->
-            <div class="plan-item paquetes" style="display:none;" onclick="selectPlan(this, 'plan_3gb', 'Plan 3 GB + 40 Min', 13.99)">
+            <!-- PAQUETES -->
+            <div class="plan-item paquetes telecom-plan" style="display:none;" onclick="selectPlan(this, 'plan_3gb', 'Plan 3 GB + 40 Min', 13.99)">
                 <div class="plan-info">
                     <div class="plan-title">Plan 3 GB + 40 Min</div>
                     <div class="plan-details">3 GB LTE + 40 Minutos a todo destino</div>
@@ -532,7 +559,7 @@
                 </div>
             </div>
 
-            <div class="plan-item paquetes" style="display:none;" onclick="selectPlan(this, 'plan_7gb', 'Plan 7 GB', 18.98)">
+            <div class="plan-item paquetes telecom-plan" style="display:none;" onclick="selectPlan(this, 'plan_7gb', 'Plan 7 GB', 18.98)">
                 <div class="plan-info">
                     <div class="plan-title">Plan 7 GB</div>
                     <div class="plan-details">7 GB LTE válidos por 30 días</div>
@@ -542,7 +569,7 @@
                 </div>
             </div>
 
-            <div class="plan-item paquetes" style="display:none;" onclick="selectPlan(this, 'plan_15gb', 'Plan 15 GB', 31.95)">
+            <div class="plan-item paquetes telecom-plan" style="display:none;" onclick="selectPlan(this, 'plan_15gb', 'Plan 15 GB', 31.95)">
                 <div class="plan-info">
                     <div class="plan-title">Plan 15 GB</div>
                     <div class="plan-details">15 GB LTE válidos por 30 días</div>
@@ -551,6 +578,50 @@
                     <span class="plan-price">$31.95</span>
                 </div>
             </div>
+
+            <!-- TARJETAS CLÁSICAS (Ocultas inicialmente) -->
+            <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectPlan(this, 'tarjeta_200', 'Tarjeta Clásica 200 USD', 215.00)">
+                <div class="plan-info">
+                    <div class="plan-title">Tarjeta Clásica 200 USD</div>
+                    <div class="plan-details">Envía 200 USD directamente a tarjeta en Cuba</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="plan-price">$215.00 USD</span>
+                </div>
+            </div>
+
+            <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectPlan(this, 'tarjeta_300', 'Tarjeta Clásica 300 USD', 325.00)">
+                <div class="plan-info">
+                    <div class="plan-title">Tarjeta Clásica 300 USD</div>
+                    <div class="plan-details">Envía 300 USD directamente a tarjeta en Cuba</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="plan-price">$325.00 USD</span>
+                </div>
+            </div>
+
+            <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectPlan(this, 'tarjeta_500', 'Tarjeta Clásica 500 USD', 550.00)">
+                <div class="plan-info">
+                    <div class="plan-title">Tarjeta Clásica 500 USD</div>
+                    <div class="plan-details">Envía 500 USD directamente a tarjeta en Cuba</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="plan-price">$550.00 USD</span>
+                </div>
+            </div>
+
+            <!-- 4ta Opción: Monto Personalizado con 15% de tarifa -->
+            <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectCustomCard(this)">
+                <div class="plan-info" style="width:100%;">
+                    <div class="plan-title">Monto Personalizado (Tarifa 15%)</div>
+                    <div class="plan-details" style="margin-bottom: 8px;">Elige el monto exacto que deseas enviar (Tarifa fija de 15%)</div>
+                    <div style="display: flex; gap: 10px; align-items: center;" onclick="event.stopPropagation()">
+                        <input type="number" id="custom-amount-input" class="input-control" placeholder="Ej. 150" min="10" oninput="calculateCustomAmount(this)" style="padding: 8px; font-size: 0.9rem;">
+                        <span style="font-weight: 700; color: var(--primary-color); white-space: nowrap;" id="custom-total-display">Total: $0.00 USD</span>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
         <button id="pay-button" class="btn-submit" onclick="processStripeCheckout()">Continuar</button>
@@ -610,6 +681,7 @@
 <script>
     const stripe = Stripe('pk_live_tu_clave_publica_de_stripe');
     let selectedPlanData = null;
+    let currentServiceType = 'movil'; // 'movil', 'nauta', 'tarjetas'
     let currentUser = JSON.parse(localStorage.getItem('hysky_current_user')) || null;
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -652,11 +724,62 @@
         }
     }
 
+    function switchServiceTab(type, element) {
+        document.querySelectorAll('.service-btn').forEach(btn => btn.classList.remove('active'));
+        element.classList.add('active');
+        currentServiceType = type;
+
+        const fieldsTelecom = document.getElementById('fields-telecom');
+        const fieldsTarjetas = document.getElementById('fields-tarjetas');
+        const telecomFilters = document.getElementById('telecom-filters');
+        const inputLabel = document.getElementById('input-label');
+        const inputPrefix = document.getElementById('input-prefix');
+        const phoneInput = document.getElementById('phone');
+
+        // Reset plan selection
+        document.querySelectorAll('.plan-item').forEach(card => card.classList.remove('selected'));
+        selectedPlanData = null;
+
+        if (type === 'tarjetas') {
+            fieldsTelecom.classList.remove('active');
+            fieldsTarjetas.classList.add('active');
+            telecomFilters.style.display = 'none';
+
+            // Mostrar solo tarjetas
+            document.querySelectorAll('.telecom-plan').forEach(p => p.style.display = 'none');
+            document.querySelectorAll('.tarjeta-plan').forEach(p => p.style.display = 'flex');
+        } else {
+            fieldsTelecom.classList.add('active');
+            fieldsTarjetas.classList.remove('active');
+            telecomFilters.style.display = 'flex';
+
+            document.querySelectorAll('.tarjeta-plan').forEach(p => p.style.display = 'none');
+            
+            // Filtrar telecom según pestaña activa actual o mostrar regulares
+            filterPlans('regular', document.querySelector('.filter-btn.active'));
+
+            if (type === 'nauta') {
+                inputLabel.textContent = "Cuenta Nauta que vas a recargar";
+                inputPrefix.style.display = "none";
+                phoneInput.placeholder = "usuario@nauta.com.cu";
+                phoneInput.removeAttribute('maxlength');
+                phoneInput.type = "email";
+            } else {
+                inputLabel.textContent = "Móvil que vas a recargar";
+                inputPrefix.style.display = "block";
+                phoneInput.placeholder = "5XXXXXXX";
+                phoneInput.setAttribute('maxlength', '8');
+                phoneInput.type = "tel";
+            }
+            phoneInput.value = "";
+        }
+    }
+
     function filterPlans(category, element) {
         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
         element.classList.add('active');
 
-        const items = document.querySelectorAll('.plan-item');
+        const items = document.querySelectorAll('.telecom-plan');
         items.forEach(item => {
             if (category === 'all') {
                 item.style.display = 'flex';
@@ -674,30 +797,36 @@
         selectedPlanData = { id: planId, name: planName, price: price };
     }
 
-    function selectService(type, element) {
-        document.querySelectorAll('.service-btn').forEach(btn => btn.classList.remove('active'));
-        element.classList.add('active');
-        const input = document.getElementById('phone');
-        const prefix = document.getElementById('input-prefix');
-        const label = document.getElementById('input-label');
+    function selectCustomCard(cardElement) {
+        document.querySelectorAll('.plan-item').forEach(card => card.classList.remove('selected'));
+        cardElement.classList.add('selected');
         
-        if (type === 'nauta') {
-            label.textContent = "Cuenta Nauta que vas a recargar";
-            prefix.style.display = "none";
-            input.placeholder = "usuario@nauta.com.cu";
-            input.removeAttribute('maxlength');
-            input.type = "email";
-        } else {
-            label.textContent = "Móvil que vas a recargar";
-            prefix.style.display = "block";
-            input.placeholder = "5XXXXXXX";
-            input.setAttribute('maxlength', '8');
-            input.type = "tel";
-        }
-        input.value = "";
+        const inputVal = parseFloat(document.getElementById('custom-amount-input').value) || 0;
+        const finalPrice = inputVal * 1.15;
+
+        selectedPlanData = {
+            id: 'tarjeta_custom',
+            name: `Tarjeta Personalizada (${inputVal} USD)`,
+            price: parseFloat(finalPrice.toFixed(2))
+        };
     }
 
-    // CORREGIDO: Manejo de registro guardando en un arreglo de usuarios en localStorage
+    function calculateCustomAmount(input) {
+        const val = parseFloat(input.value) || 0;
+        const total = val * 1.15;
+        document.getElementById('custom-total-display').textContent = `Total: $${total.toFixed(2)} USD`;
+        
+        // Si la tarjeta está seleccionada, actualizamos el precio en tiempo real
+        const card = input.closest('.plan-item');
+        if (card.classList.contains('selected')) {
+            selectedPlanData = {
+                id: 'tarjeta_custom',
+                name: `Tarjeta Personalizada (${val} USD)`,
+                price: parseFloat(total.toFixed(2))
+            };
+        }
+    }
+
     function handleRegister(e) {
         e.preventDefault();
         const name = document.getElementById('reg-name').value.trim();
@@ -705,8 +834,6 @@
         const pass = document.getElementById('reg-password').value;
 
         let users = JSON.parse(localStorage.getItem('hysky_users')) || [];
-        
-        // Verificar si el correo ya existe
         const existingUser = users.find(u => u.email === email);
         if (existingUser) {
             alert('Este correo ya está registrado. Por favor, inicia sesión.');
@@ -722,7 +849,6 @@
         switchModalTab('login');
     }
 
-    // CORREGIDO: Validación estricta contra la base de datos de usuarios guardados
     function handleLogin(e) {
         e.preventDefault();
         const email = document.getElementById('login-email').value.trim().toLowerCase();
@@ -748,13 +874,13 @@
         updateAuthUI();
     }
 
-    function saveRechargeToHistory(recipient, planName, amount) {
+    function saveRechargeToHistory(recipientInfo, planName, amount) {
         if (!currentUser) return;
         let historyKey = `history_${currentUser.email}`;
         let history = JSON.parse(localStorage.getItem(historyKey)) || [];
         history.unshift({
             date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
-            recipient,
+            recipient: recipientInfo,
             planName,
             amount
         });
@@ -776,7 +902,7 @@
             listDiv.innerHTML += `
                 <div class="history-item">
                     <strong>${item.planName}</strong> ($${item.amount} USD)<br>
-                    Destino: <code>${item.recipient}</code><br>
+                    Destino/Beneficiario: <code>${item.recipient}</code><br>
                     <small style="color:#666;">${item.date}</small>
                 </div>
             `;
@@ -784,22 +910,41 @@
     }
 
     async function processStripeCheckout() {
-        const phoneInput = document.getElementById('phone').value.trim();
         const payButton = document.getElementById('pay-button');
+        let destinationInfo = '';
 
-        if (!phoneInput) {
-            alert('Por favor, ingresa el número o cuenta a recargar.');
-            return;
+        if (currentServiceType === 'tarjetas') {
+            const recName = document.getElementById('recipient-name').value.trim();
+            const recPhone = document.getElementById('recipient-phone').value.trim();
+
+            if (!recName || !recPhone) {
+                alert('Por favor, ingresa el nombre y teléfono de quien recibe en Cuba.');
+                return;
+            }
+            destinationInfo = `${recName} (+53 ${recPhone})`;
+
+            if (selectedPlanData && selectedPlanData.id === 'tarjeta_custom') {
+                const customVal = parseFloat(document.getElementById('custom-amount-input').value) || 0;
+                if (customVal <= 0) {
+                    alert('Por favor, ingresa un monto válido para la tarjeta personalizada.');
+                    return;
+                }
+            }
+        } else {
+            destinationInfo = document.getElementById('phone').value.trim();
+            if (!destinationInfo) {
+                alert('Por favor, ingresa el número o cuenta a recargar.');
+                return;
+            }
         }
 
         if (!selectedPlanData) {
-            alert('Por favor, selecciona una recarga.');
+            alert('Por favor, selecciona una oferta o tarjeta.');
             return;
         }
 
-        // Guardar en historial si el usuario ha iniciado sesión
         if (currentUser) {
-            saveRechargeToHistory(phoneInput, selectedPlanData.name, selectedPlanData.price);
+            saveRechargeToHistory(destinationInfo, selectedPlanData.name, selectedPlanData.price);
         }
 
         try {
@@ -813,7 +958,7 @@
                     planId: selectedPlanData.id,
                     planName: selectedPlanData.name,
                     amount: selectedPlanData.price,
-                    recipient: phoneInput,
+                    recipient: destinationInfo,
                     userEmail: currentUser ? currentUser.email : 'invitado@hysky.com'
                 })
             });
@@ -829,7 +974,7 @@
             }
         } catch (error) {
             console.error('Error:', error);
-            alert(`[Modo Prueba]\nProcesando para: ${phoneInput}\nRecarga: ${selectedPlanData.name} ($${selectedPlanData.price} USD)`);
+            alert(`[Modo Prueba]\nProcesando para: ${destinationInfo}\nOpción: ${selectedPlanData.name} ($${selectedPlanData.price} USD)`);
             payButton.disabled = false;
             payButton.textContent = "Continuar";
         }
