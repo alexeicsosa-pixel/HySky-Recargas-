@@ -425,11 +425,11 @@
 
         <label style="font-weight: 700; color: var(--primary-color); display:block; margin-bottom:12px;">Selecciona una recarga</label>
         
-        <!-- Pestañas de Filtro -->
+        <!-- Pestañas de Filtro (Total: 10, Regular: 7, Paquetes: 3) -->
         <div class="filter-tabs">
-            <button class="filter-btn" onclick="filterPlans('all', this)">Todos <span>13</span></button>
+            <button class="filter-btn" onclick="filterPlans('all', this)">Todos <span>10</span></button>
             <button class="filter-btn active" onclick="filterPlans('regular', this)">Regular <span>7</span></button>
-            <button class="filter-btn" onclick="filterPlans('paquetes', this)">Paquetes <span>6</span></button>
+            <button class="filter-btn" onclick="filterPlans('paquetes', this)">Paquetes <span>3</span></button>
         </div>
 
         <!-- LISTA COMPLETA DE OPCIONES DE RECARGAS -->
@@ -509,7 +509,7 @@
                 </div>
             </div>
 
-            <!-- NUEVA OFERTA AL FINAL DE LAS REGULARES -->
+            <!-- MEGA OFERTA AL FINAL DE LAS REGULARES -->
             <div class="plan-item regular" onclick="selectPlan(this, 'plan_1250_quintuplicada', 'Envía 1250 CUP (Quintuplicada)', 99.00)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 1250 CUP Quintuplicada</div>
@@ -521,7 +521,7 @@
                 <span class="mega-badge">Mega Oferta</span>
             </div>
 
-            <!-- Paquetes (Ocultos por defecto en pestaña Regular) -->
+            <!-- PAQUETES (Exactamente 3 opciones) -->
             <div class="plan-item paquetes" style="display:none;" onclick="selectPlan(this, 'plan_3gb', 'Plan 3 GB + 40 Min', 13.99)">
                 <div class="plan-info">
                     <div class="plan-title">Plan 3 GB + 40 Min</div>
@@ -640,6 +640,18 @@
     }
     function closeHistoryModal() { document.getElementById('history-modal').style.display = 'none'; }
 
+    function switchModalTab(tab) {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        if(tab === 'login') {
+            document.querySelectorAll('.auth-tab')[0].classList.add('active');
+            document.getElementById('login-form').classList.add('active');
+        } else {
+            document.querySelectorAll('.auth-tab')[1].classList.add('active');
+            document.getElementById('register-form').classList.add('active');
+        }
+    }
+
     function filterPlans(category, element) {
         document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
         element.classList.add('active');
@@ -685,30 +697,48 @@
         input.value = "";
     }
 
+    // CORREGIDO: Manejo de registro guardando en un arreglo de usuarios en localStorage
     function handleRegister(e) {
         e.preventDefault();
-        const name = document.getElementById('reg-name').value;
-        const email = document.getElementById('reg-email').value;
+        const name = document.getElementById('reg-name').value.trim();
+        const email = document.getElementById('reg-email').value.trim().toLowerCase();
         const pass = document.getElementById('reg-password').value;
 
-        localStorage.setItem('hysky_registered_user', JSON.stringify({ name, email, pass }));
-        alert('¡Cuenta creada con éxito!');
+        let users = JSON.parse(localStorage.getItem('hysky_users')) || [];
+        
+        // Verificar si el correo ya existe
+        const existingUser = users.find(u => u.email === email);
+        if (existingUser) {
+            alert('Este correo ya está registrado. Por favor, inicia sesión.');
+            switchModalTab('login');
+            return;
+        }
+
+        users.push({ name, email, pass });
+        localStorage.setItem('hysky_users', JSON.stringify(users));
+        
+        alert('¡Cuenta creada con éxito! Ya puedes iniciar sesión.');
+        document.getElementById('register-form').reset();
         switchModalTab('login');
     }
 
+    // CORREGIDO: Validación estricta contra la base de datos de usuarios guardados
     function handleLogin(e) {
         e.preventDefault();
-        const email = document.getElementById('login-email').value;
+        const email = document.getElementById('login-email').value.trim().toLowerCase();
         const pass = document.getElementById('login-password').value;
-        const savedUser = JSON.parse(localStorage.getItem('hysky_registered_user'));
+        
+        let users = JSON.parse(localStorage.getItem('hysky_users')) || [];
+        const foundUser = users.find(u => u.email === email && u.pass === pass);
 
-        if (savedUser && savedUser.email === email && savedUser.pass === pass) {
-            currentUser = { name: savedUser.name, email: savedUser.email };
+        if (foundUser) {
+            currentUser = { name: foundUser.name, email: foundUser.email };
             localStorage.setItem('hysky_current_user', JSON.stringify(currentUser));
             closeAuthModal();
             updateAuthUI();
+            document.getElementById('login-form').reset();
         } else {
-            alert('Credenciales incorrectas.');
+            alert('Correo o contraseña incorrectos.');
         }
     }
 
@@ -716,6 +746,19 @@
         currentUser = null;
         localStorage.removeItem('hysky_current_user');
         updateAuthUI();
+    }
+
+    function saveRechargeToHistory(recipient, planName, amount) {
+        if (!currentUser) return;
+        let historyKey = `history_${currentUser.email}`;
+        let history = JSON.parse(localStorage.getItem(historyKey)) || [];
+        history.unshift({
+            date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
+            recipient,
+            planName,
+            amount
+        });
+        localStorage.setItem(historyKey, JSON.stringify(history));
     }
 
     function renderHistory() {
@@ -752,6 +795,11 @@
         if (!selectedPlanData) {
             alert('Por favor, selecciona una recarga.');
             return;
+        }
+
+        // Guardar en historial si el usuario ha iniciado sesión
+        if (currentUser) {
+            saveRechargeToHistory(phoneInput, selectedPlanData.name, selectedPlanData.price);
         }
 
         try {
