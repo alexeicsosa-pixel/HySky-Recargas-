@@ -4,39 +4,45 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HySky Recarga - Recargas a Cuba</title>
+    <!-- Fuente tipográfica similar a la imagen (Montserrat) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <!-- SDK de Stripe para pagos -->
     <script src="https://js.stripe.com/v3/"></script>
     <style>
         :root {
-            --primary-color: #0066cc;
+            --primary-color: #0b1e36;
             --primary-hover: #004c99;
-            --accent-color: #ff9800;
-            --bg-color: #f4f6f8;
+            --accent-yellow: #ffc107;
+            --accent-hover: #e0a800;
+            --bg-color: #f7f9fc;
             --card-bg: #ffffff;
-            --text-color: #1a1a1a;
-            --border-radius: 12px;
+            --text-color: #0b1e36;
+            --text-muted: #6c757d;
+            --border-radius: 16px;
         }
 
         * {
             box-sizing: border-box;
             margin: 0;
             padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Montserrat', sans-serif;
         }
 
         body {
             background-color: var(--bg-color);
             color: var(--text-color);
-            padding: 20px;
+            padding: 20px 12px;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 600px;
             margin: 0 auto;
             position: relative;
         }
 
-        /* Barra superior para autenticación opcional */
+        /* Barra superior de usuario */
         .top-bar {
             display: flex;
             justify-content: flex-end;
@@ -45,13 +51,14 @@
 
         .auth-widget {
             background: #ffffff;
-            padding: 8px 16px;
+            padding: 6px 14px;
             border-radius: 20px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-            font-size: 0.9rem;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+            font-size: 0.85rem;
             display: flex;
             align-items: center;
-            gap: 12px;
+            gap: 10px;
+            font-weight: 500;
         }
 
         .auth-widget button {
@@ -59,69 +66,71 @@
             color: white;
             border: none;
             padding: 6px 12px;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-weight: 600;
-            font-size: 0.85rem;
+            font-size: 0.8rem;
         }
 
         .auth-widget button.secondary {
-            background: #e2e8f0;
+            background: #eef2f7;
             color: #333;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 25px;
         }
 
         .brand-logo {
-            font-size: 2.4rem;
+            font-size: 2.2rem;
             font-weight: 800;
             color: var(--primary-color);
             letter-spacing: -0.5px;
-            margin-bottom: 6px;
+            margin-bottom: 4px;
         }
 
         .brand-logo span {
-            color: var(--accent-color);
+            color: var(--accent-yellow);
         }
 
         .header p {
-            color: #666;
-            font-size: 1.05rem;
+            color: var(--text-muted);
+            font-size: 0.95rem;
+            font-weight: 500;
         }
 
         .card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
-            padding: 28px;
-            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            padding: 24px 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
             margin-bottom: 24px;
         }
 
         .service-type {
             display: flex;
-            gap: 15px;
-            margin-bottom: 24px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .service-btn {
             flex: 1;
-            padding: 14px;
-            border: 2px solid #e2e8f0;
-            border-radius: 8px;
+            padding: 12px;
+            border: 2px solid #eef2f7;
+            border-radius: 12px;
             background: none;
             font-weight: 700;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s ease;
+            color: var(--primary-color);
         }
 
         .service-btn.active {
             border-color: var(--primary-color);
-            color: var(--primary-color);
-            background-color: #eef6ff;
+            color: #fff;
+            background-color: var(--primary-color);
         }
 
         .input-group {
@@ -130,19 +139,21 @@
 
         .input-group label {
             display: block;
-            font-weight: 600;
+            font-weight: 700;
             margin-bottom: 8px;
-            color: #444;
+            color: var(--primary-color);
+            font-size: 0.95rem;
         }
 
         .input-control {
             width: 100%;
             padding: 14px;
-            border: 1.5px solid #ccc;
-            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
             outline: none;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: border-color 0.2s;
+            font-weight: 500;
         }
 
         .input-control:focus {
@@ -152,10 +163,9 @@
         .phone-input {
             display: flex;
             align-items: center;
-            border: 1.5px solid #ccc;
-            border-radius: 8px;
+            border: 1.5px solid #e2e8f0;
+            border-radius: 12px;
             overflow: hidden;
-            transition: border-color 0.2s;
         }
 
         .phone-input:focus-within {
@@ -163,11 +173,11 @@
         }
 
         .prefix {
-            background-color: #eef2f5;
-            padding: 14px 18px;
-            font-weight: bold;
-            color: #444;
-            border-right: 1px solid #ccc;
+            background-color: #f8fafc;
+            padding: 14px 16px;
+            font-weight: 700;
+            color: var(--primary-color);
+            border-right: 1.5px solid #e2e8f0;
         }
 
         .phone-input input {
@@ -176,100 +186,148 @@
             border: none;
             outline: none;
             font-size: 1rem;
+            font-weight: 600;
         }
 
-        .plans-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-            gap: 16px;
-            margin-top: 12px;
+        /* Pestañas de Filtrado (Todos, Regular, Paquetes) */
+        .filter-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 16px;
+        }
+
+        .filter-btn {
+            padding: 8px 16px;
+            border: 1px solid #e2e8f0;
+            border-radius: 20px;
+            background: white;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .filter-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+
+        .filter-btn span {
+            font-size: 0.75rem;
+            opacity: 0.8;
+            margin-left: 4px;
+        }
+
+        /* Lista de Ofertas en Formato Lista (Estilo DimeCuba) */
+        .plans-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
             margin-bottom: 24px;
         }
 
-        .plan-card {
-            border: 2px solid #e2e8f0;
-            border-radius: var(--border-radius);
-            padding: 18px;
+        .plan-item {
+            border: 1.5px solid #eef2f7;
+            border-radius: 16px;
+            padding: 18px 20px;
             cursor: pointer;
             position: relative;
             transition: all 0.2s ease;
             background: #fff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
 
-        .plan-card:hover {
+        .plan-item:hover {
             border-color: var(--primary-color);
         }
 
-        .plan-card.selected {
+        .plan-item.selected {
             border-color: var(--primary-color);
-            background-color: #f8fbff;
-            box-shadow: 0 0 0 2px var(--primary-color);
+            box-shadow: 0 0 0 1.5px var(--primary-color);
+            background-color: #fbfdff;
         }
 
-        .badge {
-            position: absolute;
-            top: -10px;
-            right: 15px;
-            background: var(--accent-color);
-            color: white;
-            font-size: 0.75rem;
-            padding: 4px 10px;
-            border-radius: 12px;
-            font-weight: bold;
+        .plan-info {
+            flex: 1;
+            padding-right: 15px;
         }
 
         .plan-title {
-            font-size: 1.1rem;
-            font-weight: 700;
-            margin-bottom: 8px;
+            font-size: 1.05rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            margin-bottom: 4px;
         }
 
         .plan-details {
-            font-size: 0.88rem;
-            color: #555;
-            margin-bottom: 14px;
-            line-height: 1.4;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.35;
+            font-weight: 500;
+        }
+
+        .plan-price-container {
+            text-align: right;
+        }
+
+        .old-price {
+            font-size: 0.85rem;
+            text-decoration: line-through;
+            color: var(--text-muted);
+            display: block;
+            margin-bottom: 2px;
+            font-weight: 500;
         }
 
         .plan-price {
-            font-size: 1.3rem;
+            font-size: 1.35rem;
             font-weight: 800;
             color: var(--primary-color);
         }
 
-        .plan-price .old-price {
-            font-size: 0.9rem;
-            text-decoration: line-through;
-            color: #999;
-            margin-right: 6px;
-            font-weight: 400;
+        .recommended-badge {
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            background: var(--primary-color);
+            color: var(--accent-yellow);
+            font-size: 0.75rem;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-weight: 700;
         }
 
+        /* Botón de Continuar Estilo Amarillo */
         .btn-submit {
             width: 100%;
             padding: 16px;
-            background-color: var(--primary-color);
-            color: white;
+            background-color: var(--accent-yellow);
+            color: var(--primary-color);
             border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 700;
+            border-radius: 12px;
+            font-size: 1.05rem;
+            font-weight: 800;
             cursor: pointer;
             transition: background 0.2s ease;
         }
 
         .btn-submit:hover {
-            background-color: var(--primary-hover);
+            background-color: var(--accent-hover);
         }
 
         .footer-note {
             text-align: center;
-            font-size: 0.85rem;
-            color: #777;
-            margin-top: 16px;
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 14px;
+            font-weight: 500;
         }
 
-        /* Modales (Login y Historial) */
+        /* Modales */
         .modal {
             display: none;
             position: fixed;
@@ -282,8 +340,8 @@
         .modal-content {
             background: white;
             padding: 30px;
-            border-radius: 12px;
-            width: 100%;
+            border-radius: 16px;
+            width: 90%;
             max-width: 400px;
             position: relative;
         }
@@ -305,23 +363,14 @@
         .auth-form { display: none; }
         .auth-form.active { display: block; }
         
-        /* Historial estilos */
-        .history-list {
-            max-height: 300px;
-            overflow-y: auto;
-            margin-top: 15px;
-        }
-        .history-item {
-            padding: 10px;
-            border-bottom: 1px solid #eee;
-            font-size: 0.9rem;
-        }
+        .history-list { max-height: 300px; overflow-y: auto; margin-top: 15px; }
+        .history-item { padding: 12px; border-bottom: 1px solid #eee; font-size: 0.88rem; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <!-- BARRA SUPERIOR PARA INVITADOS / USUARIO -->
+    <!-- BARRA SUPERIOR (MODO INVITADO / USUARIO) -->
     <div class="top-bar">
         <div id="auth-widget" class="auth-widget">
             <span id="user-status-text">Modo Invitado</span>
@@ -331,54 +380,143 @@
 
     <div class="header">
         <div class="brand-logo">HySky <span>Recarga</span></div>
-        <p>Envía saldo, paquetes de datos y conexiones a Cuba al instante</p>
+        <p>Envía saldo y paquetes de datos al mejor precio</p>
     </div>
 
-    <!-- SECCIÓN PRINCIPAL DE RECARGAS (SIEMPRE VISIBLE PARA TODOS) -->
     <div class="card">
-        <!-- Selector de Tipo de Servicio -->
+        <!-- Selector de Servicio -->
         <div class="service-type">
             <button class="service-btn active" onclick="selectService('movil', this)">Cubacel Móvil</button>
             <button class="service-btn" onclick="selectService('nauta', this)">Nauta Internet</button>
         </div>
 
-        <!-- Input de Número / Cuenta -->
+        <!-- Input de Teléfono -->
         <div class="input-group">
-            <label for="phone" id="input-label">Número Cubacel que vas a recargar</label>
+            <label for="phone" id="input-label">Móvil que vas a recargar</label>
             <div class="phone-input">
                 <span class="prefix" id="input-prefix">+53</span>
                 <input type="tel" id="phone" placeholder="5XXXXXXX" maxlength="8">
             </div>
         </div>
 
-        <!-- Selección de Oferta -->
-        <label style="font-weight: 600; color: #444; display:block; margin-bottom:8px;">Selecciona una oferta</label>
-        <div class="plans-grid">
-            <!-- Plan 1 -->
-            <div class="plan-card" onclick="selectPlan(this, 'plan_600_cup', 'Plan 600 CUP', 21.99)">
-                <span class="badge">PROMO HYSKY</span>
-                <div class="plan-title">Envía 600 CUP</div>
-                <div class="plan-details">Reciben 600 CUP + Internet ILIMITADO (24 hrs / 10 días)</div>
-                <div class="plan-price"><span class="old-price">$25.00</span>$21.99 USD</div>
+        <label style="font-weight: 700; color: var(--primary-color); display:block; margin-bottom:12px;">Selecciona una recarga</label>
+        
+        <!-- Pestañas de Filtro -->
+        <div class="filter-tabs">
+            <button class="filter-btn" onclick="filterPlans('all', this)">Todos <span>12</span></button>
+            <button class="filter-btn active" onclick="filterPlans('regular', this)">Regular <span>6</span></button>
+            <button class="filter-btn" onclick="filterPlans('paquetes', this)">Paquetes <span>6</span></button>
+        </div>
+
+        <!-- LISTA COMPLETA DE OPCIONES DE RECARGAS -->
+        <div class="plans-list" id="plans-container">
+            
+            <!-- Option 1 -->
+            <div class="plan-item regular" onclick="selectPlan(this, 'plan_600_cup', 'Envía 600 CUP', 26.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 600 CUP</div>
+                    <div class="plan-details">Reciben 600 CUP + Internet ILIMITADO 24 horas x 10 días</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="old-price">$31.44</span>
+                    <span class="plan-price">$26.99</span>
+                </div>
             </div>
 
-            <!-- Plan 2 -->
-            <div class="plan-card" onclick="selectPlan(this, 'plan_1000_cup', 'Plan 1000 CUP', 43.99)">
-                <div class="plan-title">Envía 1000 CUP</div>
-                <div class="plan-details">Reciben 1000 CUP (Saldo Principal acumulable)</div>
-                <div class="plan-price"><span class="old-price">$48.38</span>$43.99 USD</div>
+            <!-- Option 2 (Recomendada) -->
+            <div class="plan-item regular" onclick="selectPlan(this, 'plan_1000_cup_promo', 'Envía 1000 CUP', 21.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 1000 CUP</div>
+                    <div class="plan-details">Reciben 1000 CUP (500 CUP x2) de saldo principal (válido 330 días)</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="old-price">$48.38</span>
+                    <span class="plan-price">$21.99</span>
+                </div>
+                <span class="recommended-badge">Recomendada</span>
             </div>
 
-            <!-- Plan 3 -->
-            <div class="plan-card" onclick="selectPlan(this, 'plan_15gb', 'Plan 15 GB', 31.95)">
-                <div class="plan-title">Plan 15 GB</div>
-                <div class="plan-details">15 GB Datos LTE válidos por 30 días</div>
-                <div class="plan-price">$31.95 USD</div>
+            <!-- Option 3 -->
+            <div class="plan-item regular" onclick="selectPlan(this, 'plan_1250_cup', 'Envía 1250 CUP', 53.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 1250 CUP</div>
+                    <div class="plan-details">Reciben 1250 CUP + Internet ILIMITADO 24 horas x 10 días</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="old-price">$62.50</span>
+                    <span class="plan-price">$53.99</span>
+                </div>
+            </div>
+
+            <!-- Option 4 -->
+            <div class="plan-item regular" onclick="selectPlan(this, 'plan_500_cup', 'Envía 500 CUP', 21.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 500 CUP</div>
+                    <div class="plan-details">Reciben 500 CUP + Internet ILIMITADO 24 horas x 10 días</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="old-price">$25.00</span>
+                    <span class="plan-price">$21.99</span>
+                </div>
+            </div>
+
+            <!-- Option 5 -->
+            <div class="plan-item regular" onclick="selectPlan(this, 'plan_250_cup', 'Envía 250 CUP', 11.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 250 CUP</div>
+                    <div class="plan-details">Reciben 250 CUP</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="old-price">$12.50</span>
+                    <span class="plan-price">$11.99</span>
+                </div>
+            </div>
+
+            <!-- Option 6 -->
+            <div class="plan-item regular" onclick="selectPlan(this, 'plan_1000_cup_std', 'Envía 1000 CUP', 43.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 1000 CUP</div>
+                    <div class="plan-details">Reciben 1000 CUP + Internet ILIMITADO 24 horas x 10 días</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="old-price">$48.38</span>
+                    <span class="plan-price">$43.99</span>
+                </div>
+            </div>
+
+            <!-- Paquetes (Ocultos por defecto en pestaña Regular) -->
+            <div class="plan-item paquetes" style="display:none;" onclick="selectPlan(this, 'plan_3gb', 'Plan 3 GB + 40 Min', 13.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Plan 3 GB + 40 Min</div>
+                    <div class="plan-details">3 GB LTE + 40 Minutos a todo destino</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="plan-price">$13.99</span>
+                </div>
+            </div>
+
+            <div class="plan-item paquetes" style="display:none;" onclick="selectPlan(this, 'plan_7gb', 'Plan 7 GB', 18.98)">
+                <div class="plan-info">
+                    <div class="plan-title">Plan 7 GB</div>
+                    <div class="plan-details">7 GB LTE válidos por 30 días</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="plan-price">$18.98</span>
+                </div>
+            </div>
+
+            <div class="plan-item paquetes" style="display:none;" onclick="selectPlan(this, 'plan_15gb', 'Plan 15 GB', 31.95)">
+                <div class="plan-info">
+                    <div class="plan-title">Plan 15 GB</div>
+                    <div class="plan-details">15 GB LTE válidos por 30 días</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="plan-price">$31.95</span>
+                </div>
             </div>
         </div>
 
-        <!-- Botón para Proceder -->
-        <button id="pay-button" class="btn-submit" onclick="processStripeCheckout()">Proceder al Pago Seguro</button>
+        <button id="pay-button" class="btn-submit" onclick="processStripeCheckout()">Continuar</button>
         <p class="footer-note">Procesado de forma segura mediante Stripe y HySky Recarga</p>
     </div>
 </div>
@@ -401,7 +539,7 @@
                 <label>Contraseña</label>
                 <input type="password" id="login-password" class="input-control" required>
             </div>
-            <button type="submit" class="btn-submit">Entrar</button>
+            <button type="submit" class="btn-submit" style="background:var(--primary-color); color:white;">Entrar</button>
         </form>
 
         <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
@@ -417,20 +555,18 @@
                 <label>Contraseña</label>
                 <input type="password" id="reg-password" class="input-control" required>
             </div>
-            <button type="submit" class="btn-submit">Crear Cuenta</button>
+            <button type="submit" class="btn-submit" style="background:var(--primary-color); color:white;">Crear Cuenta</button>
         </form>
     </div>
 </div>
 
-<!-- MODAL DE HISTORIAL DE RECARGAS -->
+<!-- MODAL DE HISTORIAL -->
 <div id="history-modal" class="modal">
     <div class="modal-content">
         <button class="close-modal" onclick="closeHistoryModal()">&times;</button>
         <h3 style="margin-bottom: 10px; color: var(--primary-color);">Historial de Recargas</h3>
-        <p style="font-size: 0.85rem; color: #666;">Tus últimas recargas realizadas con esta cuenta.</p>
-        <div id="history-list" class="history-list">
-            <!-- Se llena dinámicamente -->
-        </div>
+        <p style="font-size: 0.85rem; color: #666;">Tus últimas recargas registradas.</p>
+        <div id="history-list" class="history-list"></div>
     </div>
 </div>
 
@@ -439,7 +575,6 @@
     let selectedPlanData = null;
     let currentUser = JSON.parse(localStorage.getItem('hysky_current_user')) || null;
 
-    // Actualizar widget de usuario al cargar
     window.addEventListener('DOMContentLoaded', () => {
         updateAuthUI();
     });
@@ -460,7 +595,6 @@
         }
     }
 
-    // Modales control
     function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
     function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
     function openHistoryModal() {
@@ -469,19 +603,51 @@
     }
     function closeHistoryModal() { document.getElementById('history-modal').style.display = 'none'; }
 
-    function switchModalTab(tab) {
-        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-        if(tab === 'login') {
-            document.querySelectorAll('.auth-tab')[0].classList.add('active');
-            document.getElementById('login-form').classList.add('active');
-        } else {
-            document.querySelectorAll('.auth-tab')[1].classList.add('active');
-            document.getElementById('register-form').classList.add('active');
-        }
+    function filterPlans(category, element) {
+        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+        element.classList.add('active');
+
+        const items = document.querySelectorAll('.plan-item');
+        items.forEach(item => {
+            if (category === 'all') {
+                item.style.display = 'flex';
+            } else if (item.classList.contains(category)) {
+                item.style.display = 'flex';
+            } else {
+                item.style.display = 'none';
+            }
+        });
     }
 
-    // Registro y Login
+    function selectPlan(cardElement, planId, planName, price) {
+        document.querySelectorAll('.plan-item').forEach(card => card.classList.remove('selected'));
+        cardElement.classList.add('selected');
+        selectedPlanData = { id: planId, name: planName, price: price };
+    }
+
+    function selectService(type, element) {
+        document.querySelectorAll('.service-btn').forEach(btn => btn.classList.remove('active'));
+        element.classList.add('active');
+        const input = document.getElementById('phone');
+        const prefix = document.getElementById('input-prefix');
+        const label = document.getElementById('input-label');
+        
+        if (type === 'nauta') {
+            label.textContent = "Cuenta Nauta que vas a recargar";
+            prefix.style.display = "none";
+            input.placeholder = "usuario@nauta.com.cu";
+            input.removeAttribute('maxlength');
+            input.type = "email";
+        } else {
+            label.textContent = "Móvil que vas a recargar";
+            prefix.style.display = "block";
+            input.placeholder = "5XXXXXXX";
+            input.setAttribute('maxlength', '8');
+            input.type = "tel";
+        }
+        input.value = "";
+    }
+
     function handleRegister(e) {
         e.preventDefault();
         const name = document.getElementById('reg-name').value;
@@ -504,11 +670,6 @@
             localStorage.setItem('hysky_current_user', JSON.stringify(currentUser));
             closeAuthModal();
             updateAuthUI();
-        } else if (email === "admin@hysky.com" && pass === "123456") {
-            currentUser = { name: "Administrador", email: email };
-            localStorage.setItem('hysky_current_user', JSON.stringify(currentUser));
-            closeAuthModal();
-            updateAuthUI();
         } else {
             alert('Credenciales incorrectas.');
         }
@@ -520,19 +681,6 @@
         updateAuthUI();
     }
 
-    // Historial
-    function saveRechargeToHistory(recipient, planName, amount) {
-        if (!currentUser) return; // Si es invitado, no se guarda en historial persistente local
-        let history = JSON.parse(localStorage.getItem(`history_${currentUser.email}`)) || [];
-        history.unshift({
-            date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
-            recipient,
-            planName,
-            amount
-        });
-        localStorage.setItem(`history_${currentUser.email}`, JSON.stringify(history));
-    }
-
     function renderHistory() {
         const listDiv = document.getElementById('history-list');
         listDiv.innerHTML = '';
@@ -540,7 +688,7 @@
 
         let history = JSON.parse(localStorage.getItem(`history_${currentUser.email}`)) || [];
         if (history.length === 0) {
-            listDiv.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">No tienes recargas registradas aún.</p>';
+            listDiv.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">No tienes recargas registradas.</p>';
             return;
         }
 
@@ -555,36 +703,6 @@
         });
     }
 
-    // Funciones de la App
-    function selectService(type, element) {
-        document.querySelectorAll('.service-btn').forEach(btn => btn.classList.remove('active'));
-        element.classList.add('active');
-        const input = document.getElementById('phone');
-        const prefix = document.getElementById('input-prefix');
-        const label = document.getElementById('input-label');
-        
-        if (type === 'nauta') {
-            label.textContent = "Cuenta Nauta que vas a recargar";
-            prefix.style.display = "none";
-            input.placeholder = "usuario@nauta.com.cu";
-            input.removeAttribute('maxlength');
-            input.type = "email";
-        } else {
-            label.textContent = "Número Cubacel que vas a recargar";
-            prefix.style.display = "block";
-            input.placeholder = "5XXXXXXX";
-            input.setAttribute('maxlength', '8');
-            input.type = "tel";
-        }
-        input.value = "";
-    }
-
-    function selectPlan(cardElement, planId, planName, price) {
-        document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('selected'));
-        cardElement.classList.add('selected');
-        selectedPlanData = { id: planId, name: planName, price: price };
-    }
-
     async function processStripeCheckout() {
         const phoneInput = document.getElementById('phone').value.trim();
         const payButton = document.getElementById('pay-button');
@@ -595,13 +713,8 @@
         }
 
         if (!selectedPlanData) {
-            alert('Por favor, selecciona una oferta de recarga.');
+            alert('Por favor, selecciona una recarga.');
             return;
-        }
-
-        // Guardar simulación en historial si está logueado
-        if (currentUser) {
-            saveRechargeToHistory(phoneInput, selectedPlanData.name, selectedPlanData.price);
         }
 
         try {
@@ -627,14 +740,13 @@
             if (result.error) {
                 alert(result.error.message);
                 payButton.disabled = false;
-                payButton.textContent = "Proceder al Pago Seguro";
+                payButton.textContent = "Continuar";
             }
         } catch (error) {
             console.error('Error:', error);
-            // Simulación visual en caso de que no esté configurada la serverless todavía al probar local
-            alert(`[Modo Invitado/Prueba]\nPago simulado para: ${phoneInput}\nPlan: ${selectedPlanData.name} ($${selectedPlanData.price} USD)`);
+            alert(`[Modo Prueba]\nProcesando para: ${phoneInput}\nRecarga: ${selectedPlanData.name} ($${selectedPlanData.price} USD)`);
             payButton.disabled = false;
-            payButton.textContent = "Proceder al Pago Seguro";
+            payButton.textContent = "Continuar";
         }
     }
 </script>
