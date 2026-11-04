@@ -33,12 +33,46 @@
         .container {
             max-width: 900px;
             margin: 0 auto;
+            position: relative;
+        }
+
+        /* Barra superior para autenticación opcional */
+        .top-bar {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 15px;
+        }
+
+        .auth-widget {
+            background: #ffffff;
+            padding: 8px 16px;
+            border-radius: 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .auth-widget button {
+            background: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .auth-widget button.secondary {
+            background: #e2e8f0;
+            color: #333;
         }
 
         .header {
             text-align: center;
             margin-bottom: 30px;
-            position: relative;
         }
 
         .brand-logo {
@@ -58,76 +92,12 @@
             font-size: 1.05rem;
         }
 
-        /* Barra de usuario autenticado */
-        .user-bar {
-            position: absolute;
-            top: 0;
-            right: 0;
-            display: none;
-            align-items: center;
-            gap: 10px;
-            font-size: 0.9rem;
-            background: #eef6ff;
-            padding: 6px 12px;
-            border-radius: 20px;
-            border: 1px solid #bde0fe;
-        }
-
-        .user-bar button {
-            background: none;
-            border: none;
-            color: #e53935;
-            font-weight: bold;
-            cursor: pointer;
-        }
-
         .card {
             background: var(--card-bg);
             border-radius: var(--border-radius);
             padding: 28px;
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
             margin-bottom: 24px;
-        }
-
-        /* Secciones de autenticación y app principal */
-        .auth-container {
-            max-width: 450px;
-            margin: 40px auto;
-        }
-
-        .auth-tabs {
-            display: flex;
-            margin-bottom: 20px;
-            border-bottom: 2px solid #e2e8f0;
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 12px;
-            background: none;
-            border: none;
-            font-weight: bold;
-            font-size: 1rem;
-            cursor: pointer;
-            color: #777;
-        }
-
-        .auth-tab.active {
-            color: var(--primary-color);
-            border-bottom: 3px solid var(--primary-color);
-            margin-bottom: -2px;
-        }
-
-        .auth-form {
-            display: none;
-        }
-
-        .auth-form.active {
-            display: block;
-        }
-
-        .app-view {
-            display: none;
         }
 
         .service-type {
@@ -276,288 +246,4 @@
         }
 
         .btn-submit {
-            width: 100%;
-            padding: 16px;
-            background-color: var(--primary-color);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            transition: background 0.2s ease;
-        }
-
-        .btn-submit:hover {
-            background-color: var(--primary-hover);
-        }
-
-        .btn-submit:disabled {
-            background-color: #ccc;
-            cursor: not-allowed;
-        }
-
-        .footer-note {
-            text-align: center;
-            font-size: 0.85rem;
-            color: #777;
-            margin-top: 16px;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <div class="header">
-        <div class="brand-logo">HySky <span>Recarga</span></div>
-        <p>Envía saldo, paquetes de datos y conexiones a Cuba al instante</p>
-        
-        <!-- Barra de usuario activo -->
-        <div id="user-bar" class="user-bar">
-            <span id="welcome-user">Hola, Usuario</span>
-            <button onclick="logoutUser()">Cerrar Sesión</button>
-        </div>
-    </div>
-
-    <!-- SECCIÓN DE AUTENTICACIÓN (LOGIN / REGISTRO) -->
-    <div id="auth-section" class="card auth-container">
-        <div class="auth-tabs">
-            <button class="auth-tab active" onclick="switchAuthTab('login')">Iniciar Sesión</button>
-            <button class="auth-tab" onclick="switchAuthTab('register')">Registrarse</button>
-        </div>
-
-        <!-- Formulario de Inicio de Sesión -->
-        <form id="login-form" class="auth-form active" onsubmit="handleLogin(event)">
-            <div class="input-group">
-                <label>Correo Electrónico</label>
-                <input type="email" id="login-email" class="input-control" placeholder="tu@correo.com" required>
-            </div>
-            <div class="input-group">
-                <label>Contraseña</label>
-                <input type="password" id="login-password" class="input-control" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn-submit">Entrar</button>
-        </form>
-
-        <!-- Formulario de Registro -->
-        <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
-            <div class="input-group">
-                <label>Nombre Completo</label>
-                <input type="text" id="reg-name" class="input-control" placeholder="Tu Nombre" required>
-            </div>
-            <div class="input-group">
-                <label>Correo Electrónico</label>
-                <input type="email" id="reg-email" class="input-control" placeholder="tu@correo.com" required>
-            </div>
-            <div class="input-group">
-                <label>Contraseña</label>
-                <input type="password" id="reg-password" class="input-control" placeholder="••••••••" required>
-            </div>
-            <button type="submit" class="btn-submit">Crear Cuenta</button>
-        </form>
-    </div>
-
-    <!-- SECCIÓN PRINCIPAL DE RECARGAS (OCULTA HASTA INICIAR SESIÓN) -->
-    <div id="app-section" class="app-view">
-        <div class="card">
-            <!-- Selector de Tipo de Servicio -->
-            <div class="service-type">
-                <button class="service-btn active" onclick="selectService('movil', this)">Cubacel Móvil</button>
-                <button class="service-btn" onclick="selectService('nauta', this)">Nauta Internet</button>
-            </div>
-
-            <!-- Input de Número / Cuenta -->
-            <div class="input-group">
-                <label for="phone" id="input-label">Número Cubacel que vas a recargar</label>
-                <div class="phone-input">
-                    <span class="prefix" id="input-prefix">+53</span>
-                    <input type="tel" id="phone" placeholder="5XXXXXXX" maxlength="8">
-                </div>
-            </div>
-
-            <!-- Selección de Oferta -->
-            <label style="font-weight: 600; color: #444; display:block; margin-bottom:8px;">Selecciona una oferta</label>
-            <div class="plans-grid">
-                <!-- Plan 1 -->
-                <div class="plan-card" onclick="selectPlan(this, 'plan_600_cup', 'Plan 600 CUP', 21.99)">
-                    <span class="badge">PROMO HYSKY</span>
-                    <div class="plan-title">Envía 600 CUP</div>
-                    <div class="plan-details">Reciben 600 CUP + Internet ILIMITADO (24 hrs / 10 días)</div>
-                    <div class="plan-price"><span class="old-price">$25.00</span>$21.99 USD</div>
-                </div>
-
-                <!-- Plan 2 -->
-                <div class="plan-card" onclick="selectPlan(this, 'plan_1000_cup', 'Plan 1000 CUP', 43.99)">
-                    <div class="plan-title">Envía 1000 CUP</div>
-                    <div class="plan-details">Reciben 1000 CUP (Saldo Principal acumulable)</div>
-                    <div class="plan-price"><span class="old-price">$48.38</span>$43.99 USD</div>
-                </div>
-
-                <!-- Plan 3 -->
-                <div class="plan-card" onclick="selectPlan(this, 'plan_15gb', 'Plan 15 GB', 31.95)">
-                    <div class="plan-title">Plan 15 GB</div>
-                    <div class="plan-details">15 GB Datos LTE válidos por 30 días</div>
-                    <div class="plan-price">$31.95 USD</div>
-                </div>
-            </div>
-
-            <!-- Botón para Proceder -->
-            <button id="pay-button" class="btn-submit" onclick="processStripeCheckout()">Proceder al Pago Seguro</button>
-            <p class="footer-note">Procesado de forma segura mediante Stripe y HySky Recarga</p>
-        </div>
-    </div>
-</div>
-
-<script>
-    // Inicializa Stripe (Reemplaza con tu llave pública real)
-    const stripe = Stripe('pk_live_tu_clave_publica_de_stripe');
-    let selectedPlanData = null;
-
-    // Control de Pestañas de Autenticación
-    function switchAuthTab(tab) {
-        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-        
-        if(tab === 'login') {
-            document.querySelectorAll('.auth-tab')[0].classList.add('active');
-            document.getElementById('login-form').classList.add('active');
-        } else {
-            document.querySelectorAll('.auth-tab')[1].classList.add('active');
-            document.getElementById('register-form').classList.add('active');
-        }
-    }
-
-    // Manejar Registro (Simulado localmente o conectado a backend)
-    function handleRegister(e) {
-        e.preventDefault();
-        const name = document.getElementById('reg-name').value;
-        const email = document.getElementById('reg-email').value;
-        const pass = document.getElementById('reg-password').value;
-
-        // Guardar en localStorage para persistencia básica
-        localStorage.setItem('hysky_user', JSON.stringify({ name, email, pass }));
-        alert('¡Cuenta creada con éxito! Ahora puedes iniciar sesión.');
-        switchAuthTab('login');
-    }
-
-    // Manejar Inicio de Sesión
-    function handleLogin(e) {
-        e.preventDefault();
-        const email = document.getElementById('login-email').value;
-        const pass = document.getElementById('login-password').value;
-
-        const savedUser = JSON.parse(localStorage.getItem('hysky_user'));
-
-        // Verificación básica (puedes reemplazarla con llamada a tu API / Netlify Functions)
-        if (savedUser && savedUser.email === email && savedUser.pass === pass) {
-            loginSuccess(savedUser.name);
-        } else if (!savedUser && email === "admin@hysky.com" && pass === "123456") {
-            loginSuccess("Administrador");
-        } else {
-            alert('Correo o contraseña incorrectos.');
-        }
-    }
-
-    function loginSuccess(name) {
-        document.getElementById('auth-section').style.display = 'none';
-        document.getElementById('app-section').style.display = 'block';
-        document.getElementById('user-bar').style.display = 'flex';
-        document.getElementById('welcome-user').textContent = `Hola, ${name}`;
-    }
-
-    function logoutUser() {
-        document.getElementById('auth-section').style.display = 'block';
-        document.getElementById('app-section').style.display = 'none';
-        document.getElementById('user-bar').style.display = 'none';
-        document.getElementById('login-form').reset();
-    }
-
-    // Funciones de la aplicación de recargas
-    function selectService(type, element) {
-        document.querySelectorAll('.service-btn').forEach(btn => btn.classList.remove('active'));
-        element.classList.add('active');
-        
-        const input = document.getElementById('phone');
-        const prefix = document.getElementById('input-prefix');
-        const label = document.getElementById('input-label');
-        
-        if (type === 'nauta') {
-            label.textContent = "Cuenta Nauta que vas a recargar";
-            prefix.style.display = "none";
-            input.placeholder = "usuario@nauta.com.cu";
-            input.removeAttribute('maxlength');
-            input.type = "email";
-        } else {
-            label.textContent = "Número Cubacel que vas a recargar";
-            prefix.style.display = "block";
-            input.placeholder = "5XXXXXXX";
-            input.setAttribute('maxlength', '8');
-            input.type = "tel";
-        }
-        input.value = "";
-    }
-
-    function selectPlan(cardElement, planId, planName, price) {
-        document.querySelectorAll('.plan-card').forEach(card => card.classList.remove('selected'));
-        cardElement.classList.add('selected');
-        selectedPlanData = { id: planId, name: planName, price: price };
-    }
-
-    async function processStripeCheckout() {
-        const phoneInput = document.getElementById('phone').value.trim();
-        const payButton = document.getElementById('pay-button');
-
-        if (!phoneInput) {
-            alert('Por favor, ingresa el número de teléfono o cuenta Nauta a recargar.');
-            return;
-        }
-
-        if (!selectedPlanData) {
-            alert('Por favor, selecciona una oferta de recarga.');
-            return;
-        }
-
-        try {
-            payButton.disabled = true;
-            payButton.textContent = "Conectando con Stripe...";
-
-            const response = await fetch('/.netlify/functions/create-checkout-session', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    planId: selectedPlanData.id,
-                    planName: selectedPlanData.name,
-                    amount: selectedPlanData.price,
-                    recipient: phoneInput
-                })
-            });
-
-            const session = await response.json();
-
-            if (!response.ok) {
-                throw new Error(session.error || 'Error al iniciar la sesión de pago.');
-            }
-
-            const result = await stripe.redirectToCheckout({
-                sessionId: session.id
-            });
-
-            if (result.error) {
-                alert(result.error.message);
-                payButton.disabled = false;
-                payButton.textContent = "Proceder al Pago Seguro";
-            }
-
-        } catch (error) {
-            console.error('Error:', error);
-            alert('Ocurrió un error al procesar el pago. Inténtalo de nuevo.');
-            payButton.disabled = false;
-            payButton.textContent = "Proceder al Pago Seguro";
-        }
-    }
-</script>
-
-</body>
-</html>
+            width: 10
