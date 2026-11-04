@@ -313,6 +313,18 @@
             font-weight: 700;
         }
 
+        .mega-badge {
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            background: #6f42c1;
+            color: #ffffff;
+            font-size: 0.75rem;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
         /* Botón de Continuar Estilo Amarillo */
         .btn-submit {
             width: 100%;
@@ -423,7 +435,7 @@
         <!-- LISTA COMPLETA DE OPCIONES DE RECARGAS -->
         <div class="plans-list" id="plans-container">
             
-            <!-- OPCIÓN DE PRUEBA (PRIMERA OPCIÓN) -->
+            <!-- OPCIÓN DE PRUEBA -->
             <div class="plan-item regular" onclick="selectPlan(this, 'plan_25_cup_prueba', 'Envía 25 CUP (Prueba)', 1.00)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 25 CUP</div>
@@ -486,18 +498,6 @@
             </div>
 
             <!-- Option 5 -->
-            <div class="plan-item regular" onclick="selectPlan(this, 'plan_250_cup', 'Envía 250 CUP', 11.99)">
-                <div class="plan-info">
-                    <div class="plan-title">Envía 250 CUP</div>
-                    <div class="plan-details">Reciben 250 CUP</div>
-                </div>
-                <div class="plan-price-container">
-                    <span class="old-price">$12.50</span>
-                    <span class="plan-price">$11.99</span>
-                </div>
-            </div>
-
-            <!-- Option 6 -->
             <div class="plan-item regular" onclick="selectPlan(this, 'plan_1000_cup_std', 'Envía 1000 CUP', 43.99)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 1000 CUP</div>
@@ -507,6 +507,18 @@
                     <span class="old-price">$48.38</span>
                     <span class="plan-price">$43.99</span>
                 </div>
+            </div>
+
+            <!-- NUEVA OFERTA AL FINAL DE LAS REGULARES -->
+            <div class="plan-item regular" onclick="selectPlan(this, 'plan_1250_quintuplicada', 'Envía 1250 CUP (Quintuplicada)', 99.00)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 1250 CUP Quintuplicada</div>
+                    <div class="plan-details">Reciben 6250 CUP de saldo principal + Internet ilimitada por 30 días</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="plan-price">$99.00</span>
+                </div>
+                <span class="mega-badge">Mega Oferta</span>
             </div>
 
             <!-- Paquetes (Ocultos por defecto en pestaña Regular) -->
