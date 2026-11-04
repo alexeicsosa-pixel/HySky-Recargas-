@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HySky Recarga - Recargas a Cuba</title>
+    <style>
+        :root {
+            --primary-color: #0066cc;
+            --primary-hover: #004c99;
+            --accent-color: #ff9800;
+            --bg-color: #f4f6f8;
+            --card-bg: #ffffff;
+            --text-color: #1a1a1a;
+            --border-radius: 12px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        /* Encabezado con la marca HySky Recarga */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .brand-logo {
+            font-size: 2.4rem;
+            font-weight: 800;
+            color: var(--primary-color);
+            letter-spacing: -0.5px;
+            margin-bottom: 6px;
+        }
+
+        .brand-logo span {
+            color: var(--accent-color);
+        }
+
+        .header p {
+            color: #666;
+            font-size: 1.05rem;
+        }
+
+        .card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius);
+            padding: 28px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+            margin-bottom: 24px;
+        }
+
+        /* Selector de Tipo de Servicio */
+        .service-type {
+            display: flex;
+            gap: 15px;
+            margin-bottom: 24px;
+        }
+
+        .service-btn {
+            flex: 1;
+            padding: 14px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            background: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .service-btn.active {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+            background-color: #eef6ff;
+        }
+
+        /* Formulario Input */
+        .input-group {
+            margin-bottom: 24px;
+        }
+
+        .input-group label {
+            display: block;
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #444;
+        }
+
+        .phone-input {
+            display: flex;
+            align-items: center;
+            border: 1.5px solid #ccc;
+            border-radius: 8px;
+            overflow: hidden;
+            transition: border-color 0.2s;
+        }
+
+        .phone-input:focus-within {
+            border-color: var(--primary-color);
+        }
+
+        .prefix {
+            background-color: #eef2f5;
+            padding: 14px 18px;
+            font-weight: bold;
+            color: #444;
+            border-right: 1px solid #ccc;
+        }
+
+        .phone-input input {
+            width: 100%;
+            padding: 14px;
+            border: none;
+            outline: none;
+            font-size:
