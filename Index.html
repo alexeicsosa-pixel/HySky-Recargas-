@@ -843,7 +843,6 @@
                 throw new Error(session.error || 'Error al conectar con la pasarela de pago.');
             }
 
-            // Guardar en historial local únicamente si la sesión de Stripe se crea con éxito
             if (currentUser) {
                 saveRechargeToHistory(destinationInfo, selectedPlanData.name, selectedPlanData.price);
             }
@@ -857,7 +856,7 @@
             }
         } catch (error) {
             console.error('Error detallado de Stripe:', error);
-            alert(`No se pudo procesar el pago: ${error.message}\n\nAsegúrate de que la función de Netlify esté desplegada y configurada correctamente con STRIPE_SECRET_KEY.`);
+            alert(`No se pudo procesar el pago: ${error.message}\n\nAsegúrate de que la función de Netlify esté desplegada y configurada correctamente.`);
             payButton.disabled = false;
             payButton.textContent = "Continuar";
         }
@@ -865,4 +864,4 @@
 </script>
 
 </body>
-</html>  
+</html>
