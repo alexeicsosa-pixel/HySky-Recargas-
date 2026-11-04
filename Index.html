@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HySky Recarga - Recargas a Cuba</title>
-    <!-- Fuente tipográfica similar a la imagen (Montserrat) -->
+    <!-- Tipografía Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -189,7 +189,7 @@
             font-weight: 600;
         }
 
-        /* Pestañas de Filtrado (Todos, Regular, Paquetes) */
+        /* Pestañas de Filtrado */
         .filter-tabs {
             display: flex;
             gap: 8px;
@@ -220,7 +220,7 @@
             margin-left: 4px;
         }
 
-        /* Lista de Ofertas en Formato Lista (Estilo DimeCuba) */
+        /* Lista de Ofertas */
         .plans-list {
             display: flex;
             flex-direction: column;
@@ -295,6 +295,18 @@
             right: 20px;
             background: var(--primary-color);
             color: var(--accent-yellow);
+            font-size: 0.75rem;
+            padding: 3px 12px;
+            border-radius: 12px;
+            font-weight: 700;
+        }
+
+        .promo-badge {
+            position: absolute;
+            bottom: -10px;
+            right: 20px;
+            background: #28a745;
+            color: #ffffff;
             font-size: 0.75rem;
             padding: 3px 12px;
             border-radius: 12px;
@@ -403,14 +415,27 @@
         
         <!-- Pestañas de Filtro -->
         <div class="filter-tabs">
-            <button class="filter-btn" onclick="filterPlans('all', this)">Todos <span>12</span></button>
-            <button class="filter-btn active" onclick="filterPlans('regular', this)">Regular <span>6</span></button>
+            <button class="filter-btn" onclick="filterPlans('all', this)">Todos <span>13</span></button>
+            <button class="filter-btn active" onclick="filterPlans('regular', this)">Regular <span>7</span></button>
             <button class="filter-btn" onclick="filterPlans('paquetes', this)">Paquetes <span>6</span></button>
         </div>
 
         <!-- LISTA COMPLETA DE OPCIONES DE RECARGAS -->
         <div class="plans-list" id="plans-container">
             
+            <!-- OPCIÓN DE PRUEBA (PRIMERA OPCIÓN) -->
+            <div class="plan-item regular" onclick="selectPlan(this, 'plan_25_cup_prueba', 'Envía 25 CUP (Prueba)', 1.00)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 25 CUP</div>
+                    <div class="plan-details">Prueba de servicio. Reciben 25 CUP de saldo principal</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="old-price">$2.00</span>
+                    <span class="plan-price">$1.00</span>
+                </div>
+                <span class="promo-badge">Oferta de Prueba</span>
+            </div>
+
             <!-- Option 1 -->
             <div class="plan-item regular" onclick="selectPlan(this, 'plan_600_cup', 'Envía 600 CUP', 26.99)">
                 <div class="plan-info">
