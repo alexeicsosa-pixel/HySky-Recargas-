@@ -110,18 +110,18 @@
 
         .service-type {
             display: flex;
-            gap: 8px;
+            gap: 10px;
             margin-bottom: 20px;
         }
 
         .service-btn {
             flex: 1;
-            padding: 10px 6px;
+            padding: 12px;
             border: 2px solid #eef2f7;
             border-radius: 12px;
             background: none;
             font-weight: 700;
-            font-size: 0.8rem;
+            font-size: 0.9rem;
             cursor: pointer;
             transition: all 0.2s ease;
             color: var(--primary-color);
@@ -413,29 +413,28 @@
 
     <div class="header">
         <div class="brand-logo">HySky <span>Recarga</span></div>
-        <p>Envía saldo, paquetes y tarjetas a Cuba al mejor precio</p>
+        <p>Envía saldo y tarjetas a Cuba al mejor precio</p>
     </div>
 
     <div class="card">
-        <!-- Selector de Servicio -->
+        <!-- Selector de Servicio (Solo Móvil y Tarjetas Clásicas) -->
         <div class="service-type">
             <button class="service-btn active" onclick="switchServiceTab('movil', this)">Cubacel Móvil</button>
-            <button class="service-btn" onclick="switchServiceTab('nauta', this)">Nauta Internet</button>
             <button class="service-btn" onclick="switchServiceTab('tarjetas', this)">Tarjetas Clásicas</button>
         </div>
 
-        <!-- SECCIÓN DE INPUTS PARA MÓVIL / NAUTA -->
+        <!-- SECCIÓN DE INPUTS PARA MÓVIL -->
         <div id="fields-telecom" class="service-fields active">
             <div class="input-group">
                 <label for="phone" id="input-label">Móvil que vas a recargar</label>
                 <div class="phone-input">
-                    <span class="prefix" id="input-prefix">+53</span>
+                    <span class="prefix">+53</span>
                     <input type="tel" id="phone" placeholder="5XXXXXXX" maxlength="8">
                 </div>
             </div>
         </div>
 
-        <!-- SECCIÓN DE INPUTS PARA TARJETAS CLÁSICAS (Nombre, Teléfono y Número de Tarjeta) -->
+        <!-- SECCIÓN DE INPUTS PARA TARJETAS CLÁSICAS (16 Dígitos) -->
         <div id="fields-tarjetas" class="service-fields">
             <div class="input-group">
                 <label for="recipient-name">Nombre completo de quien recibe en Cuba</label>
@@ -449,21 +448,21 @@
                 </div>
             </div>
             <div class="input-group">
-                <label for="card-number">Número de la Tarjeta Clásica</label>
-                <input type="text" id="card-number" class="input-control" placeholder="Ej. 9225  XXXX XXXX" autocomplete="off">
+                <label for="card-number">Número de la Tarjeta Clásica (16 dígitos)</label>
+                <input type="text" id="card-number" class="input-control" placeholder="Ej. 9225XXXXXXXXXXXXXXXX" maxlength="16" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
             </div>
         </div>
 
         <label id="section-title-label" style="font-weight: 700; color: var(--primary-color); display:block; margin-bottom:12px;">Selecciona una recarga</label>
         
-        <!-- Pestañas de Filtro (Solo para Telecom) -->
+        <!-- Pestañas de Filtro (Solo para Móvil) -->
         <div id="telecom-filters" class="filter-tabs">
             <button class="filter-btn" onclick="filterPlans('all', this)">Todos <span>10</span></button>
             <button class="filter-btn active" onclick="filterPlans('regular', this)">Regular <span>7</span></button>
             <button class="filter-btn" onclick="filterPlans('paquetes', this)">Paquetes <span>3</span></button>
         </div>
 
-        <!-- LISTA DE OPCIONES (TELECOM Y TARJETAS) -->
+        <!-- LISTA DE OPCIONES -->
         <div class="plans-list" id="plans-container">
             
             <!-- OPCIÓN DE PRUEBA -->
@@ -540,7 +539,7 @@
                 </div>
             </div>
 
-            <!-- MEGA OFERTA AL FINAL DE LAS REGULARES -->
+            <!-- MEGA OFERTA -->
             <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_1250_quintuplicada', 'Envía 1250 CUP (Quintuplicada)', 99.00)">
                 <div class="plan-info">
                     <div class="plan-title">Envía 1250 CUP Quintuplicada</div>
@@ -583,7 +582,7 @@
                 </div>
             </div>
 
-            <!-- TARJETAS CLÁSICAS (Ocultas inicialmente) -->
+            <!-- TARJETAS CLÁSICAS (Con las 3 ofertas + 4ta personalizada) -->
             <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectPlan(this, 'tarjeta_200', 'Tarjeta Clásica 200 USD', 215.00)">
                 <div class="plan-info">
                     <div class="plan-title">Tarjeta Clásica 200 USD</div>
@@ -685,7 +684,7 @@
 <script>
     const stripe = Stripe('pk_live_tu_clave_publica_de_stripe');
     let selectedPlanData = null;
-    let currentServiceType = 'movil'; // 'movil', 'nauta', 'tarjetas'
+    let currentServiceType = 'movil'; // 'movil', 'tarjetas'
     let currentUser = JSON.parse(localStorage.getItem('hysky_current_user')) || null;
 
     window.addEventListener('DOMContentLoaded', () => {
@@ -736,8 +735,6 @@
         const fieldsTelecom = document.getElementById('fields-telecom');
         const fieldsTarjetas = document.getElementById('fields-tarjetas');
         const telecomFilters = document.getElementById('telecom-filters');
-        const inputLabel = document.getElementById('input-label');
-        const inputPrefix = document.getElementById('input-prefix');
         const phoneInput = document.getElementById('phone');
 
         // Reset plan selection
@@ -762,19 +759,6 @@
             // Filtrar telecom según pestaña activa actual o mostrar regulares
             filterPlans('regular', document.querySelector('.filter-btn.active'));
 
-            if (type === 'nauta') {
-                inputLabel.textContent = "Cuenta Nauta que vas a recargar";
-                inputPrefix.style.display = "none";
-                phoneInput.placeholder = "usuario@nauta.com.cu";
-                phoneInput.removeAttribute('maxlength');
-                phoneInput.type = "email";
-            } else {
-                inputLabel.textContent = "Móvil que vas a recargar";
-                inputPrefix.style.display = "block";
-                phoneInput.placeholder = "5XXXXXXX";
-                phoneInput.setAttribute('maxlength', '8');
-                phoneInput.type = "tel";
-            }
             phoneInput.value = "";
         }
     }
@@ -922,9 +906,15 @@
             const cardNumber = document.getElementById('card-number').value.trim();
 
             if (!recName || !recPhone || !cardNumber) {
-                alert('Por favor, completa el nombre, el teléfono y el número de la tarjeta clásica.');
+                alert('Por favor, completa el nombre, el teléfono y el número de la tarjeta.');
                 return;
             }
+
+            if (cardNumber.length !== 16) {
+                alert('El número de la Tarjeta Clásica en Cuba debe tener exactamente 16 dígitos.');
+                return;
+            }
+
             destinationInfo = `${recName} (Tel: +53 ${recPhone}) - Tarjeta: ${cardNumber}`;
 
             if (selectedPlanData && selectedPlanData.id === 'tarjeta_custom') {
@@ -937,7 +927,7 @@
         } else {
             destinationInfo = document.getElementById('phone').value.trim();
             if (!destinationInfo) {
-                alert('Por favor, ingresa el número o cuenta a recargar.');
+                alert('Por favor, ingresa el número móvil a recargar.');
                 return;
             }
         }
