@@ -417,7 +417,7 @@
     </div>
 
     <div class="card">
-        <!-- Selector de Servicio (Incluye Tarjetas Clásicas) -->
+        <!-- Selector de Servicio -->
         <div class="service-type">
             <button class="service-btn active" onclick="switchServiceTab('movil', this)">Cubacel Móvil</button>
             <button class="service-btn" onclick="switchServiceTab('nauta', this)">Nauta Internet</button>
@@ -435,7 +435,7 @@
             </div>
         </div>
 
-        <!-- SECCIÓN DE INPUTS PARA TARJETAS CLÁSICAS (Nombre y Teléfono del receptor en Cuba) -->
+        <!-- SECCIÓN DE INPUTS PARA TARJETAS CLÁSICAS (Nombre, Teléfono y Número de Tarjeta) -->
         <div id="fields-tarjetas" class="service-fields">
             <div class="input-group">
                 <label for="recipient-name">Nombre completo de quien recibe en Cuba</label>
@@ -447,6 +447,10 @@
                     <span class="prefix">+53</span>
                     <input type="tel" id="recipient-phone" placeholder="5XXXXXXX" maxlength="8">
                 </div>
+            </div>
+            <div class="input-group">
+                <label for="card-number">Número de la Tarjeta Clásica</label>
+                <input type="text" id="card-number" class="input-control" placeholder="Ej. 9225  XXXX XXXX" autocomplete="off">
             </div>
         </div>
 
@@ -816,7 +820,6 @@
         const total = val * 1.15;
         document.getElementById('custom-total-display').textContent = `Total: $${total.toFixed(2)} USD`;
         
-        // Si la tarjeta está seleccionada, actualizamos el precio en tiempo real
         const card = input.closest('.plan-item');
         if (card.classList.contains('selected')) {
             selectedPlanData = {
@@ -902,7 +905,7 @@
             listDiv.innerHTML += `
                 <div class="history-item">
                     <strong>${item.planName}</strong> ($${item.amount} USD)<br>
-                    Destino/Beneficiario: <code>${item.recipient}</code><br>
+                    Destino: <code>${item.recipient}</code><br>
                     <small style="color:#666;">${item.date}</small>
                 </div>
             `;
@@ -916,12 +919,13 @@
         if (currentServiceType === 'tarjetas') {
             const recName = document.getElementById('recipient-name').value.trim();
             const recPhone = document.getElementById('recipient-phone').value.trim();
+            const cardNumber = document.getElementById('card-number').value.trim();
 
-            if (!recName || !recPhone) {
-                alert('Por favor, ingresa el nombre y teléfono de quien recibe en Cuba.');
+            if (!recName || !recPhone || !cardNumber) {
+                alert('Por favor, completa el nombre, el teléfono y el número de la tarjeta clásica.');
                 return;
             }
-            destinationInfo = `${recName} (+53 ${recPhone})`;
+            destinationInfo = `${recName} (Tel: +53 ${recPhone}) - Tarjeta: ${cardNumber}`;
 
             if (selectedPlanData && selectedPlanData.id === 'tarjeta_custom') {
                 const customVal = parseFloat(document.getElementById('custom-amount-input').value) || 0;
