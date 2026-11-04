@@ -1,10 +1,10 @@
 const stripe = require('stripe')(process.env.STRIPE_SECRET_KEY);
 
 exports.handler = async (event) => {
-    // Solo permitir solicitudes POST
     if (event.httpMethod !== 'POST') {
         return { 
             statusCode: 405, 
+            headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ error: 'Método no permitido' }) 
         };
     }
@@ -13,7 +13,6 @@ exports.handler = async (event) => {
         const body = JSON.parse(event.body);
         const { planId, planName, amount, recipient, userEmail } = body;
 
-        // Crear la sesión de checkout en Stripe con los metadatos
         const session = await stripe.checkout.sessions.create({
             payment_method_types: ['card'],
             customer_email: userEmail !== 'invitado@hysky.com' ? userEmail : undefined,
@@ -25,7 +24,7 @@ exports.handler = async (event) => {
                             name: `HySky Recarga: ${planName}`,
                             description: `Destino: ${recipient}`,
                         },
-                        unit_amount: Math.round(amount * 100), // Stripe trabaja en centavos
+                        unit_amount: Math.round(amount * 100),
                     },
                     quantity: 1,
                 },
@@ -33,13 +32,11 @@ exports.handler = async (event) => {
             mode: 'payment',
             success_url: `${process.env.URL}/?status=success`,
             cancel_url: `${process.env.URL}/?status=cancel`,
-            
-            // AQUÍ SE GUARDA LA INFORMACIÓN PROCESADA
             metadata: {
                 planId: planId,
                 planName: planName,
                 amount: amount,
-                recipientInfo: recipient, // Guarda el teléfono móvil o (Nombre + Teléfono + 16 dígitos de tarjeta)
+                recipientInfo: recipient,
                 userEmail: userEmail
             }
         });
@@ -50,7 +47,7 @@ exports.handler = async (event) => {
             body: JSON.stringify({ id: session.id })
         };
     } catch (error) {
-        console.error('Error procesando Stripe:', error);
+        console.error('Error en Stripe:', error);
         return {
             statusCode: 500,
             headers: { 'Content-Type': 'application/json' },
