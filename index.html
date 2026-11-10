@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>HySky Recarga - Recargas y Tarjetas a Cuba</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+    <script src="https://js.stripe.com/v3/"></script>
+</head>
+<body>
+
+<div class="container">
+    <div class="top-bar">
+        <div id="auth-widget" class="auth-widget">
+            <span id="user-status-text">Modo Invitado</span>
+            <button onclick="openAuthModal()">Iniciar Sesión</button>
+        </div>
+    </div>
+
+    <div class="header">
+        <div class="brand-logo">HySky <span>Recarga</span></div>
+        <p>Envía saldo y tarjetas a Cuba al mejor precio</p>
+        <span class="saas-subtag">Plataforma SaaS por Licencia de Software SAAS Hysky</span>
+    </div>
+
+    <div class="card">
+        <div class="service-type">
+            <button class="service-btn active" onclick="switchServiceTab('movil', this)">Cubacel Móvil</button>
+            <button class="service-btn" onclick="switchServiceTab('tarjetas', this)">Tarjetas Clásicas</button>
+        </div>
+
+        <div id="fields-telecom" class="service-fields active">
+            <div class="input-group">
+                <label for="phone">Móvil que vas a recargar</label>
+                <div class="phone-input">
+                    <span class="prefix">+53</span>
+                    <input type="tel" id="phone" placeholder="5XXXXXXX" maxlength="8" inputmode="numeric">
+                </div>
+            </div>
+        </div>
+
+        <div id="fields-tarjetas" class="service-fields">
+            <div class="input-group">
+                <label for="recipient-name">Nombre completo de quien recibe en Cuba</label>
+                <input type="text" id="recipient-name" class="input-control" placeholder="Nombre y Apellidos">
+            </div>
+            <div class="input-group">
+                <label for="recipient-phone">Teléfono de quien recibe en Cuba</label>
+                <div class="phone-input">
+                    <span class="prefix">+53</span>
+                    <input type="tel" id="recipient-phone" placeholder="5XXXXXXX" maxlength="8" inputmode="numeric">
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="card-number">Número de la Tarjeta Clásica (16 dígitos)</label>
+                <input type="tel" id="card-number" class="input-control" placeholder="Ej. 9225XXXXXXXXXXXXXXXX" maxlength="16" inputmode="numeric" autocomplete="off" oninput="this.value = this.value.replace(/[^0-9]/g, '')">
+            </div>
+        </div>
+
+        <label class="section-label">Selecciona una recarga</label>
+        
+        <div id="telecom-filters" class="filter-tabs">
+            <button class="filter-btn" onclick="filterPlans('all', this)">Todos <span>10</span></button>
+            <button class="filter-btn active" onclick="filterPlans('regular', this)">Regular <span>7</span></button>
+            <button class="filter-btn" onclick="filterPlans('paquetes', this)">Paquetes <span>3</span></button>
+        </div>
+
+        <div class="plans-list" id="plans-container">
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_25_cup_prueba', 'Envía 25 CUP (Prueba)', 1.00)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 25 CUP</div>
+                    <div class="plan-details">Prueba de servicio. Reciben 25 CUP de saldo principal</div>
+                </div>
+                <div class="plan-price-container">
+                    <span class="old-price">$2.00</span>
+                    <span class="plan-price">$1.00</span>
+                </div>
+                <span class="promo-badge">Oferta de Prueba</span>
+            </div>
+
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_360_cup', 'Envía 360 CUP', 10.00)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 360 CUP</div>
+                    <div class="plan-details">Reciben 360 CUP de saldo principal</div>
+                </div>
+                <div class="plan-price-container"><span class="old-price">$14.00</span><span class="plan-price">$10.00</span></div>
+            </div>
+
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_1000_cup_promo', 'Envía 1000 CUP', 21.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 1000 CUP</div>
+                    <div class="plan-details">Reciben 1000 CUP (500 CUP x2) de saldo principal</div>
+                </div>
+                <div class="plan-price-container"><span class="old-price">$48.38</span><span class="plan-price">$21.99</span></div>
+                <span class="recommended-badge">Recomendada</span>
+            </div>
+
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_1250_cup', 'Envía 1250 CUP', 53.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 1250 CUP</div>
+                    <div class="plan-details">Reciben 1250 CUP + Internet ILIMITADO 24 horas x 10 días</div>
+                </div>
+                <div class="plan-price-container"><span class="old-price">$62.50</span><span class="plan-price">$53.99</span></div>
+            </div>
+
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_500_cup', 'Envía 500 CUP', 21.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 500 CUP</div>
+                    <div class="plan-details">Reciben 500 CUP + Internet ILIMITADO 24 horas x 10 días</div>
+                </div>
+                <div class="plan-price-container"><span class="old-price">$25.00</span><span class="plan-price">$21.99</span></div>
+            </div>
+
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_1000_cup_std', 'Envía 1000 CUP', 43.99)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 1000 CUP</div>
+                    <div class="plan-details">Reciben 1000 CUP + Internet ILIMITADO 24 horas x 10 días</div>
+                </div>
+                <div class="plan-price-container"><span class="old-price">$48.38</span><span class="plan-price">$43.99</span></div>
+            </div>
+
+            <div class="plan-item regular telecom-plan" onclick="selectPlan(this, 'plan_1250_quintuplicada', 'Envía 1250 CUP (Quintuplicada)', 99.00)">
+                <div class="plan-info">
+                    <div class="plan-title">Envía 1250 CUP Quintuplicada</div>
+                    <div class="plan-details">Reciben 6250 CUP de saldo principal + Internet ilimitada por 30 días</div>
+                </div>
+                <div class="plan-price-container"><span class="plan-price">$99.00</span></div>
+                <span class="mega-badge">Mega Oferta</span>
+            </div>
+
+            <div class="plan-item paquetes telecom-plan" style="display:none;" onclick="selectPlan(this, 'plan_3gb', 'Plan 3 GB + 40 Min', 13.99)">
+                <div class="plan-info"><div class="plan-title">Plan 3 GB + 40 Min</div><div class="plan-details">3 GB LTE + 40 Minutos a todo destino</div></div>
+                <div class="plan-price-container"><span class="plan-price">$13.99</span></div>
+            </div>
+
+            <div class="plan-item paquetes telecom-plan" style="display:none;" onclick="selectPlan(this, 'plan_7gb', 'Plan 7 GB', 18.98)">
+                <div class="plan-info"><div class="plan-title">Plan 7 GB</div><div class="plan-details">7 GB LTE válidos por 30 días</div></div>
+                <div class="plan-price-container"><span class="plan-price">$18.98</span></div>
+            </div>
+
+            <div class="plan-item paquetes telecom-plan" style="display:none;" onclick="selectPlan(this, 'plan_15gb', 'Plan 15 GB', 31.95)">
+                <div class="plan-info"><div class="plan-title">Plan 15 GB</div><div class="plan-details">15 GB LTE válidos por 30 días</div></div>
+                <div class="plan-price-container"><span class="plan-price">$31.95</span></div>
+            </div>
+
+            <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectPlan(this, 'tarjeta_200', 'Tarjeta Clásica 200 USD', 215.00)">
+                <div class="plan-info"><div class="plan-title">Tarjeta Clásica 200 USD</div><div class="plan-details">Envía 200 USD directamente a tarjeta en Cuba</div></div>
+                <div class="plan-price-container"><span class="plan-price">$215.00 USD</span></div>
+            </div>
+
+            <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectPlan(this, 'tarjeta_300', 'Tarjeta Clásica 300 USD', 325.00)">
+                <div class="plan-info"><div class="plan-title">Tarjeta Clásica 300 USD</div><div class="plan-details">Envía 300 USD directamente a tarjeta en Cuba</div></div>
+                <div class="plan-price-container"><span class="plan-price">$325.00 USD</span></div>
+            </div>
+
+            <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectPlan(this, 'tarjeta_500', 'Tarjeta Clásica 500 USD', 550.00)">
+                <div class="plan-info"><div class="plan-title">Tarjeta Clásica 500 USD</div><div class="plan-details">Envía 500 USD directamente a tarjeta en Cuba</div></div>
+                <div class="plan-price-container"><span class="plan-price">$550.00 USD</span></div>
+            </div>
+
+            <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectCustomCard(this)">
+                <div class="plan-info" style="width:100%;">
+                    <div class="plan-title">Monto Personalizado (Tarifa 15%)</div>
+                    <div class="plan-details" style="margin-bottom: 8px;">Elige el monto exacto a enviar a la tarjeta</div>
+                    <input type="number" id="custom-card-amount" class="input-control" placeholder="Ej. 150" min="50" max="1000" inputmode="numeric" style="padding:8px;" oninput="updateCustomCardPrice(this.value)">
+                </div>
+                <div class="plan-price-container">
+                    <span class="plan-price" id="custom-card-price">$0.00</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="stripe-saas-notice">
+            <strong>Información de Facturación:</strong> El importe facturado corresponde a la tarifa del servicio SaaS y procesamiento digital gestionado por <strong>Licencia de Software SAAS Hysky</strong>.
+        </div>
+
+        <button class="btn-submit" id="btn-pay" onclick="processOrder()">Pagar y Enviar Ahora</button>
+        <p class="footer-note">⚡ Procesamiento instantáneo e infraestructura en la nube protegida</p>
+    </div>
+
+    <div class="saas-info-card">
+        <h4>Acerca de la plataforma</h4>
+        <p><strong>Licencia de Software SAAS Hysky</strong> es una plataforma tecnológica en la nube diseñada para administrar, automatizar y procesar servicios de telecomunicaciones y gestión de datos electrónicos.</p>
+        <ul>
+            <li>Integración y automatización por API segura.</li>
+            <li>Monitoreo de estado de transacciones en tiempo real.</li>
+            <li>Licenciamiento de software para comercios y distribuidores.</li>
+        </ul>
+    </div>
+
+    <footer class="footer-legal-container">
+        <p>
+            <strong>Aviso Legal y Condiciones de Uso:</strong> <strong>Licencia de Software SAAS Hysky</strong> es una plataforma tecnológica independiente que opera exclusivamente como proveedor de software como servicio (SaaS). El pago realizado corresponde a la licencia de uso del software, mantenimiento de infraestructura y soporte técnico. No es una institución financiera.
+        </p>
+        <p style="margin-top: 10px; text-align: center;">
+            &copy; 2026 Licencia de Software SAAS Hysky. Todos los derechos reservados.
+        </p>
+    </footer>
+</div>
+
+<!-- Modal Autenticación -->
+<div id="auth-modal" class="modal">
+    <div class="modal-content">
+        <button class="close-modal" onclick="closeAuthModal()">&times;</button>
+        <div class="auth-tabs">
+            <button class="auth-tab active" onclick="switchAuthTab('login', this)">Iniciar Sesión</button>
+            <button class="auth-tab" onclick="switchAuthTab('register', this)">Registrarse</button>
+        </div>
+        <form id="login-form" class="auth-form active" onsubmit="handleLogin(event)">
+            <div class="input-group">
+                <label>Correo Electrónico</label>
+                <input type="email" class="input-control" required>
+            </div>
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input type="password" class="input-control" required>
+            </div>
+            <button type="submit" class="btn-submit" style="padding: 12px;">Entrar</button>
+        </form>
+        <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
+            <div class="input-group">
+                <label>Nombre Completo</label>
+                <input type="text" class="input-control" required>
+            </div>
+            <div class="input-group">
+                <label>Correo Electrónico</label>
+                <input type="email" class="input-control" required>
+            </div>
+            <div class="input-group">
+                <label>Contraseña</label>
+                <input type="password" class="input-control" required>
+            </div>
+            <button type="submit" class="btn-submit" style="padding: 12px;">Crear Cuenta</button>
+        </form>
+    </div>
+</div>
+
+<script src="js/app.js"></script>
+<script src="js/stripe-checkout.js"></script>
+<script src="js/chatbot.js"></script>
+</body>
+</html>
