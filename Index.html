@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HySky Recarga - Recargas y Tarjetas a Cuba</title>
+    <title>HySky Recarga - Recargas y Tarjetas a Cuba | Licencia de Software SAAS Hysky</title>
     <!-- Tipografía Montserrat -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -97,6 +97,16 @@
             color: var(--text-muted);
             font-size: 0.95rem;
             font-weight: 500;
+        }
+
+        .saas-subtag {
+            font-size: 0.75rem;
+            color: var(--primary-hover);
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-top: 4px;
+            display: block;
         }
 
         .card {
@@ -307,6 +317,21 @@
         .promo-badge { background: #28a745; color: #ffffff; }
         .mega-badge { background: #6f42c1; color: #ffffff; }
 
+        .stripe-saas-notice {
+            background-color: #f1f5f9;
+            border-left: 4px solid var(--primary-color);
+            padding: 12px 14px;
+            border-radius: 8px;
+            font-size: 0.8rem;
+            color: #475569;
+            margin-bottom: 18px;
+            line-height: 1.4;
+        }
+
+        .stripe-saas-notice strong {
+            color: var(--primary-color);
+        }
+
         .btn-submit {
             width: 100%;
             padding: 16px;
@@ -324,12 +349,52 @@
             background-color: var(--accent-hover);
         }
 
+        .saas-info-card {
+            background: #ffffff;
+            border-radius: var(--border-radius);
+            padding: 20px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.04);
+            margin-bottom: 24px;
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+        }
+
+        .saas-info-card h4 {
+            color: var(--primary-color);
+            margin-bottom: 8px;
+            font-size: 0.95rem;
+        }
+
+        .saas-info-card ul {
+            margin-top: 8px;
+            padding-left: 18px;
+        }
+
+        .saas-info-card li {
+            margin-bottom: 4px;
+        }
+
         .footer-note {
             text-align: center;
             font-size: 0.8rem;
             color: var(--text-muted);
             margin-top: 14px;
             font-weight: 500;
+        }
+
+        .footer-legal-container {
+            border-top: 1px solid #e2e8f0;
+            margin-top: 30px;
+            padding-top: 20px;
+            font-size: 0.78rem;
+            color: #64748b;
+            line-height: 1.6;
+            text-align: justify;
+        }
+
+        .footer-legal-container strong {
+            color: var(--primary-color);
         }
 
         .modal {
@@ -384,6 +449,7 @@
     <div class="header">
         <div class="brand-logo">HySky <span>Recarga</span></div>
         <p>Envía saldo y tarjetas a Cuba al mejor precio</p>
+        <span class="saas-subtag">Plataforma SaaS por Licencia de Software SAAS Hysky</span>
     </div>
 
     <div class="card">
@@ -533,336 +599,211 @@
             <div class="plan-item tarjeta-plan" style="display:none;" onclick="selectCustomCard(this)">
                 <div class="plan-info" style="width:100%;">
                     <div class="plan-title">Monto Personalizado (Tarifa 15%)</div>
-                    <div class="plan-details" style="margin-bottom: 8px;">Elige el monto exacto que deseas enviar (Tarifa fija de 15%)</div>
-                    <div style="display: flex; gap: 10px; align-items: center;" onclick="event.stopPropagation()">
-                        <input type="number" id="custom-amount-input" class="input-control" placeholder="Ej. 150" min="10" oninput="calculateCustomAmount(this)" style="padding: 8px; font-size: 0.9rem;">
-                        <span style="font-weight: 700; color: var(--primary-color); white-space: nowrap;" id="custom-total-display">Total: $0.00 USD</span>
-                    </div>
+                    <div class="plan-details" style="margin-bottom: 8px;">Elige el monto exacto a enviar a la tarjeta</div>
+                    <input type="number" id="custom-card-amount" class="input-control" placeholder="Ej. 150" min="50" max="1000" style="padding:8px;" oninput="updateCustomCardPrice(this.value)">
+                </div>
+                <div class="plan-price-container">
+                    <span class="plan-price" id="custom-card-price">$0.00</span>
                 </div>
             </div>
         </div>
 
-        <button id="pay-button" class="btn-submit" onclick="processStripeCheckout()">Continuar</button>
-        <p class="footer-note">Procesado de forma segura mediante Stripe y HySky Recarga</p>
+        <!-- Notificación de Facturación SaaS para Stripe -->
+        <div class="stripe-saas-notice">
+            <strong>Información de Facturación:</strong> El importe facturado a través de este formulario corresponde a la tarifa del servicio SaaS, uso de la plataforma técnica y procesamiento digital gestionado por <strong>Licencia de Software SAAS Hysky</strong>.
+        </div>
+
+        <button class="btn-submit" onclick="processOrder()">Pagar y Enviar Ahora</button>
+        <p class="footer-note">⚡ Procesamiento instantáneo e infraestructura en la nube protegida</p>
     </div>
+
+    <!-- Tarjeta Informativa de la Plataforma SaaS -->
+    <div class="saas-info-card">
+        <h4>Acerca de la plataforma</h4>
+        <p><strong>Licencia de Software SAAS Hysky</strong> es una plataforma tecnológica en la nube diseñada para administrar, automatizar y procesar servicios de telecomunicaciones y gestión de datos electrónicos mediante una interfaz centralizada de alta disponibilidad.</p>
+        <ul>
+            <li>Integración y automatización por API segura.</li>
+            <li>Monitoreo de estado de transacciones en tiempo real.</li>
+            <li>Licenciamiento de software para comercios y distribuidores.</li>
+        </ul>
+    </div>
+
+    <!-- Pie de página Legal (Cumplimiento de Stripe) -->
+    <footer class="footer-legal-container">
+        <p>
+            <strong>Aviso Legal y Condiciones de Uso:</strong> <strong>Licencia de Software SAAS Hysky</strong> es una plataforma tecnológica independiente que opera exclusivamente como proveedor de software como servicio (SaaS). El pago realizado a través de este sitio web corresponde a la licencia de uso del software, mantenimiento de infraestructura en la nube y soporte técnico. <strong>Licencia de Software SAAS Hysky</strong> no es una institución financiera, no procesa ni almacena fondos de terceros, ni actúa como entidad bancaria o emisora de dinero electrónico. La adquisición de tiempo aire y datos móviles se realiza mediante integraciones técnicas con proveedores y operadores de telecomunicaciones independientes, siendo el usuario/comercio el único responsable de la gestión de sus credenciales y operaciones comerciales.
+        </p>
+        <p style="margin-top: 10px; text-align: center;">
+            &copy; 2026 Licencia de Software SAAS Hysky. Todos los derechos reservados.
+        </p>
+    </footer>
 </div>
 
-<!-- Modal Autenticación -->
+<!-- Modal Autenticación / Registro -->
 <div id="auth-modal" class="modal">
     <div class="modal-content">
         <button class="close-modal" onclick="closeAuthModal()">&times;</button>
         <div class="auth-tabs">
-            <button class="auth-tab active" onclick="switchModalTab('login')">Iniciar Sesión</button>
-            <button class="auth-tab" onclick="switchModalTab('register')">Registrarse</button>
+            <button class="auth-tab active" onclick="switchAuthTab('login', this)">Iniciar Sesión</button>
+            <button class="auth-tab" onclick="switchAuthTab('register', this)">Registrarse</button>
         </div>
-
         <form id="login-form" class="auth-form active" onsubmit="handleLogin(event)">
             <div class="input-group">
                 <label>Correo Electrónico</label>
-                <input type="email" id="login-email" class="input-control" required>
+                <input type="email" class="input-control" required>
             </div>
             <div class="input-group">
                 <label>Contraseña</label>
-                <input type="password" id="login-password" class="input-control" required>
+                <input type="password" class="input-control" required>
             </div>
-            <button type="submit" class="btn-submit" style="background:var(--primary-color); color:white;">Entrar</button>
+            <button type="submit" class="btn-submit" style="padding: 12px;">Entrar</button>
         </form>
-
         <form id="register-form" class="auth-form" onsubmit="handleRegister(event)">
             <div class="input-group">
                 <label>Nombre Completo</label>
-                <input type="text" id="reg-name" class="input-control" required>
+                <input type="text" class="input-control" required>
             </div>
             <div class="input-group">
                 <label>Correo Electrónico</label>
-                <input type="email" id="reg-email" class="input-control" required>
+                <input type="email" class="input-control" required>
             </div>
             <div class="input-group">
                 <label>Contraseña</label>
-                <input type="password" id="reg-password" class="input-control" required>
+                <input type="password" class="input-control" required>
             </div>
-            <button type="submit" class="btn-submit" style="background:var(--primary-color); color:white;">Crear Cuenta</button>
+            <button type="submit" class="btn-submit" style="padding: 12px;">Crear Cuenta</button>
         </form>
-    </div>
-</div>
-
-<!-- Modal Historial -->
-<div id="history-modal" class="modal">
-    <div class="modal-content">
-        <button class="close-modal" onclick="closeHistoryModal()">&times;</button>
-        <h3 style="margin-bottom: 10px; color: var(--primary-color);">Historial de Recargas</h3>
-        <p style="font-size: 0.85rem; color: #666;">Tus últimas recargas registradas.</p>
-        <div id="history-list" class="history-list"></div>
     </div>
 </div>
 
 <script>
-    const stripe = Stripe('pk_live_51UXvtDAqXjfjVvYnWZeLUaAFI5Vk6HZmqJQsgpXtXWhsv5uQKLzkALpSWt22DTfNHt2QGrDwJVowqYcdydbFypTH00cxJOo7hs');
+    let currentService = 'movil';
     let selectedPlanData = null;
-    let currentServiceType = 'movil';
-    let currentUser = JSON.parse(localStorage.getItem('hysky_current_user')) || null;
 
-    window.addEventListener('DOMContentLoaded', () => { updateAuthUI(); });
+    function switchServiceTab(service, btn) {
+        currentService = service;
+        document.querySelectorAll('.service-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-    function updateAuthUI() {
-        const widget = document.getElementById('auth-widget');
-        if (currentUser) {
-            widget.innerHTML = `<span>Hola, <b>${currentUser.name}</b></span><button class="secondary" onclick="openHistoryModal()">Historial</button><button onclick="logout()">Salir</button>`;
+        document.querySelectorAll('.service-fields').forEach(f => f.classList.remove('active'));
+        
+        if (service === 'movil') {
+            document.getElementById('fields-telecom').classList.add('active');
+            document.getElementById('telecom-filters').style.display = 'flex';
+            filterPlans('regular', document.querySelectorAll('.filter-btn')[1]);
         } else {
-            widget.innerHTML = `<span>Modo Invitado</span><button onclick="openAuthModal()">Iniciar Sesión</button>`;
+            document.getElementById('fields-tarjetas').classList.add('active');
+            document.getElementById('telecom-filters').style.display = 'none';
+            showTarjetaPlans();
         }
     }
 
-    function openAuthModal() { document.getElementById('auth-modal').style.display = 'flex'; }
-    function closeAuthModal() { document.getElementById('auth-modal').style.display = 'none'; }
-    function openHistoryModal() { renderHistory(); document.getElementById('history-modal').style.display = 'flex'; }
-    function closeHistoryModal() { document.getElementById('history-modal').style.display = 'none'; }
+    function filterPlans(type, btn) {
+        if(currentService !== 'movil') return;
+        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
 
-    function switchModalTab(tab) {
-        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
-        if(tab === 'login') {
-            document.querySelectorAll('.auth-tab')[0].classList.add('active');
-            document.getElementById('login-form').classList.add('active');
-        } else {
-            document.querySelectorAll('.auth-tab')[1].classList.add('active');
-            document.getElementById('register-form').classList.add('active');
-        }
-    }
-
-    function switchServiceTab(type, element) {
-        document.querySelectorAll('.service-btn').forEach(btn => btn.classList.remove('active'));
-        element.classList.add('active');
-        currentServiceType = type;
-
-        const fieldsTelecom = document.getElementById('fields-telecom');
-        const fieldsTarjetas = document.getElementById('fields-tarjetas');
-        const telecomFilters = document.getElementById('telecom-filters');
-        const phoneInput = document.getElementById('phone');
-
-        document.querySelectorAll('.plan-item').forEach(card => card.classList.remove('selected'));
-        selectedPlanData = null;
-
-        if (type === 'tarjetas') {
-            fieldsTelecom.classList.remove('active');
-            fieldsTarjetas.classList.add('active');
-            telecomFilters.style.display = 'none';
-            document.querySelectorAll('.telecom-plan').forEach(p => p.style.display = 'none');
-            document.querySelectorAll('.tarjeta-plan').forEach(p => p.style.display = 'flex');
-        } else {
-            fieldsTelecom.classList.add('active');
-            fieldsTarjetas.classList.remove('active');
-            telecomFilters.style.display = 'flex';
-            document.querySelectorAll('.tarjeta-plan').forEach(p => p.style.display = 'none');
-            filterPlans('regular', document.querySelector('.filter-btn.active'));
-            phoneInput.value = "";
-        }
-    }
-
-    function filterPlans(category, element) {
-        document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
-        element.classList.add('active');
-
-        document.querySelectorAll('.telecom-plan').forEach(item => {
-            if (category === 'all' || item.classList.contains(category)) {
+        const items = document.querySelectorAll('.telecom-plan');
+        items.forEach(item => {
+            if (type === 'all') {
+                item.style.display = 'flex';
+            } else if (item.classList.contains(type)) {
                 item.style.display = 'flex';
             } else {
                 item.style.display = 'none';
             }
         });
+        document.querySelectorAll('.tarjeta-plan').forEach(t => t.style.display = 'none');
     }
 
-    function selectPlan(cardElement, planId, planName, price) {
-        document.querySelectorAll('.plan-item').forEach(card => card.classList.remove('selected'));
-        cardElement.classList.add('selected');
-        selectedPlanData = { id: planId, name: planName, price: price };
+    function showTarjetaPlans() {
+        document.querySelectorAll('.telecom-plan').forEach(t => t.style.display = 'none');
+        document.querySelectorAll('.tarjeta-plan').forEach(t => t.style.display = 'flex');
     }
 
-    function selectCustomCard(cardElement) {
-        document.querySelectorAll('.plan-item').forEach(card => card.classList.remove('selected'));
-        cardElement.classList.add('selected');
-        
-        const inputVal = parseFloat(document.getElementById('custom-amount-input').value) || 0;
-        const finalPrice = inputVal * 1.15;
-
-        selectedPlanData = {
-            id: 'tarjeta_custom',
-            name: `Tarjeta Personalizada (${inputVal} USD)`,
-            price: parseFloat(finalPrice.toFixed(2))
-        };
+    function selectPlan(element, id, name, price) {
+        document.querySelectorAll('.plan-item').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        selectedPlanData = { id, name, price };
     }
 
-    function calculateCustomAmount(input) {
-        const val = parseFloat(input.value) || 0;
-        const total = val * 1.15;
-        document.getElementById('custom-total-display').textContent = `Total: $${total.toFixed(2)} USD`;
-        
-        const card = input.closest('.plan-item');
-        if (card.classList.contains('selected')) {
+    function selectCustomCard(element) {
+        document.querySelectorAll('.plan-item').forEach(el => el.classList.remove('selected'));
+        element.classList.add('selected');
+        const inputVal = document.getElementById('custom-card-amount').value;
+        updateCustomCardPrice(inputVal);
+    }
+
+    function updateCustomCardPrice(amount) {
+        const val = parseFloat(amount);
+        const priceContainer = document.getElementById('custom-card-price');
+        if (!isNaN(val) && val >= 50) {
+            const totalPrice = (val * 1.15).toFixed(2);
+            priceContainer.innerText = '$' + totalPrice + ' USD';
             selectedPlanData = {
-                id: 'tarjeta_custom',
-                name: `Tarjeta Personalizada (${val} USD)`,
-                price: parseFloat(total.toFixed(2))
+                id: 'tarjeta_custom_' + val,
+                name: 'Tarjeta Clásica ' + val + ' USD',
+                price: parseFloat(totalPrice)
             };
+        } else {
+            priceContainer.innerText = '$0.00';
+            selectedPlanData = null;
         }
     }
 
-    function handleRegister(e) {
-        e.preventDefault();
-        const name = document.getElementById('reg-name').value.trim();
-        const email = document.getElementById('reg-email').value.trim().toLowerCase();
-        const pass = document.getElementById('reg-password').value;
-
-        let users = JSON.parse(localStorage.getItem('hysky_users')) || [];
-        if (users.some(u => u.email === email)) {
-            alert('Este correo ya está registrado. Por favor, inicia sesión.');
-            switchModalTab('login');
+    function processOrder() {
+        if (!selectedPlanData) {
+            alert('Por favor selecciona una recarga o plan para continuar.');
             return;
         }
 
-        users.push({ name, email, pass });
-        localStorage.setItem('hysky_users', JSON.stringify(users));
-        alert('¡Cuenta creada con éxito! Ya puedes iniciar sesión.');
-        document.getElementById('register-form').reset();
-        switchModalTab('login');
+        if (currentService === 'movil') {
+            const phone = document.getElementById('phone').value;
+            if (phone.length < 8) {
+                alert('Por favor introduce un número de teléfono válido en Cuba (+53).');
+                return;
+            }
+            alert('Procesando pedido en Licencia de Software SAAS Hysky:\n' + selectedPlanData.name + '\nTeléfono: +53 ' + phone + '\nTotal: $' + selectedPlanData.price);
+        } else {
+            const name = document.getElementById('recipient-name').value;
+            const phone = document.getElementById('recipient-phone').value;
+            const card = document.getElementById('card-number').value;
+
+            if (!name || phone.length < 8 || card.length < 16) {
+                alert('Por favor completa todos los datos de la tarjeta receptora (16 dígitos).');
+                return;
+            }
+            alert('Procesando pedido en Licencia de Software SAAS Hysky:\n' + selectedPlanData.name + '\nDestinatario: ' + name + '\nTarjeta: ' + card + '\nTotal: $' + selectedPlanData.price);
+        }
+    }
+
+    function openAuthModal() {
+        document.getElementById('auth-modal').style.display = 'flex';
+    }
+
+    function closeAuthModal() {
+        document.getElementById('auth-modal').style.display = 'none';
+    }
+
+    function switchAuthTab(tab, btn) {
+        document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+        btn.classList.add('active');
+        document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+        document.getElementById(tab + '-form').classList.add('active');
     }
 
     function handleLogin(e) {
         e.preventDefault();
-        const email = document.getElementById('login-email').value.trim().toLowerCase();
-        const pass = document.getElementById('login-password').value;
-        
-        let users = JSON.parse(localStorage.getItem('hysky_users')) || [];
-        const foundUser = users.find(u => u.email === email && u.pass === pass);
-
-        if (foundUser) {
-            currentUser = { name: foundUser.name, email: foundUser.email };
-            localStorage.setItem('hysky_current_user', JSON.stringify(currentUser));
-            closeAuthModal();
-            updateAuthUI();
-            document.getElementById('login-form').reset();
-        } else {
-            alert('Correo o contraseña incorrectos.');
-        }
+        document.getElementById('user-status-text').innerText = 'Usuario Conectado';
+        closeAuthModal();
     }
 
-    function logout() {
-        currentUser = null;
-        localStorage.removeItem('hysky_current_user');
-        updateAuthUI();
-    }
-
-    function saveRechargeToHistory(recipientInfo, planName, amount) {
-        if (!currentUser) return;
-        let historyKey = `history_${currentUser.email}`;
-        let history = JSON.parse(localStorage.getItem(historyKey)) || [];
-        history.unshift({
-            date: new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString(),
-            recipient: recipientInfo,
-            planName,
-            amount
-        });
-        localStorage.setItem(historyKey, JSON.stringify(history));
-    }
-
-    function renderHistory() {
-        const listDiv = document.getElementById('history-list');
-        listDiv.innerHTML = '';
-        if (!currentUser) return;
-
-        let history = JSON.parse(localStorage.getItem(`history_${currentUser.email}`)) || [];
-        if (history.length === 0) {
-            listDiv.innerHTML = '<p style="text-align:center; color:#888; padding:20px;">No tienes recargas registradas.</p>';
-            return;
-        }
-
-        history.forEach(item => {
-            listDiv.innerHTML += `<div class="history-item"><strong>${item.planName}</strong> ($${item.amount} USD)<br>Destino: <code>${item.recipient}</code><br><small style="color:#666;">${item.date}</small></div>`;
-        });
-    }
-
-    async function processStripeCheckout() {
-        const payButton = document.getElementById('pay-button');
-        let destinationInfo = '';
-
-        if (currentServiceType === 'tarjetas') {
-            const recName = document.getElementById('recipient-name').value.trim();
-            const recPhone = document.getElementById('recipient-phone').value.trim();
-            const cardNumber = document.getElementById('card-number').value.trim();
-
-            if (!recName || !recPhone || !cardNumber) {
-                alert('Por favor, completa el nombre, el teléfono y el número de la tarjeta.');
-                return;
-            }
-
-            if (cardNumber.length !== 16) {
-                alert('El número de la Tarjeta Clásica en Cuba debe tener exactamente 16 dígitos.');
-                return;
-            }
-
-            destinationInfo = `${recName} (Tel: +53 ${recPhone}) - Tarjeta: ${cardNumber}`;
-
-            if (selectedPlanData && selectedPlanData.id === 'tarjeta_custom') {
-                const customVal = parseFloat(document.getElementById('custom-amount-input').value) || 0;
-                if (customVal <= 0) {
-                    alert('Por favor, ingresa un monto válido para la tarjeta personalizada.');
-                    return;
-                }
-            }
-        } else {
-            destinationInfo = document.getElementById('phone').value.trim();
-            if (!destinationInfo) {
-                alert('Por favor, ingresa el número móvil a recargar.');
-                return;
-            }
-        }
-
-        if (!selectedPlanData) {
-            alert('Por favor, selecciona una oferta o tarjeta.');
-            return;
-        }
-
-        try {
-            payButton.disabled = true;
-            payButton.textContent = "Conectando con Stripe...";
-
-            const response = await fetch('/.netlify/functions/create-checkout-session', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    planId: selectedPlanData.id,
-                    planName: selectedPlanData.name,
-                    amount: selectedPlanData.price,
-                    recipient: destinationInfo,
-                    userEmail: currentUser ? currentUser.email : 'invitado@hysky.com'
-                })
-            });
-
-            const session = await response.json();
-
-            if (!response.ok) {
-                throw new Error(session.error || 'Error al conectar con la pasarela de pago.');
-            }
-
-            if (currentUser) {
-                saveRechargeToHistory(destinationInfo, selectedPlanData.name, selectedPlanData.price);
-            }
-
-            const result = await stripe.redirectToCheckout({ sessionId: session.id });
-            
-            if (result.error) {
-                alert(result.error.message);
-                payButton.disabled = false;
-                payButton.textContent = "Continuar";
-            }
-        } catch (error) {
-            console.error('Error detallado de Stripe:', error);
-            alert(`No se pudo procesar el pago: ${error.message}\n\nAsegúrate de que la función de Netlify esté desplegada y configurada correctamente.`);
-            payButton.disabled = false;
-            payButton.textContent = "Continuar";
-        }
+    function handleRegister(e) {
+        e.preventDefault();
+        document.getElementById('user-status-text').innerText = 'Usuario Registrado';
+        closeAuthModal();
     }
 </script>
 
 </body>
-</html> 
+</html>
